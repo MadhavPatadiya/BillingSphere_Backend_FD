@@ -1,6 +1,7 @@
 const PurchaseModel = require("../models/purchase_model");
 const Items = require("../models/items_model");
 const Ledger = require("../models/ledger_model");
+const { get } = require("mongoose");
 
 const PurchaseController = {
   // For creating purchase entry
@@ -44,9 +45,7 @@ const PurchaseController = {
       }
 
       const existingPurchase = await PurchaseModel.findOne({
-        $or: [
-          { billNumber: req.body.billNumber },
-        ],
+        $or: [{ billNumber: req.body.billNumber }],
       });
 
       if (existingPurchase) {
@@ -93,7 +92,7 @@ const PurchaseController = {
   fetchAllPurchase: async function (req, res) {
     try {
       const { user_id } = req.params;
-      const fetchAllPurchase = await PurchaseModel.find({ user_id: user_id});
+      const fetchAllPurchase = await PurchaseModel.find({ user_id: user_id });
       return res.json({ success: true, data: fetchAllPurchase });
     } catch (ex) {
       return res.json({ success: false, message: ex });
@@ -121,9 +120,13 @@ const PurchaseController = {
   deletePurchaseById: async function (req, res) {
     try {
       const id = req.params.id;
-      
-      // find purchase entry by id
       const getPurchase = await PurchaseModel.findOne({ _id: id });
+      const ledgerID = getPurchase.ledger;
+      const purchaseType = getPurchase.type;
+      const purchaseTotalAmount = parseFloat(getPurchase.totalamount);
+      // purchaseData.cashAmount = parseFloat(purchaseData.cashAmount);
+      const purchaseDueAmount = parseFloat(getPurchase.dueAmount);
+
       // Iterate over the entries of the purchase
       for (const entry of getPurchase.entries) {
         const productId = entry.itemName;
@@ -133,7 +136,22 @@ const PurchaseController = {
         product.maximumStock -= quantity;
         await product.save();
       }
+
+      if (purchaseType === "Debit") {
+        const ledger = await Ledger.findById(ledgerID);
+
+        if (purchaseDueAmount == 0) {
+          const op = ledger.openingBalance + purchaseTotalAmount;
+          ledger.openingBalance = op;
+        } else if (getPurchase.dueAmount > 0) {
+          const op = purchaseTotalAmount - purchaseDueAmount;
+          ledger.openingBalance = op;
+        }
+        await ledger.save();
+      }
+      
       const getPurchaseAndDelete = await PurchaseModel.findByIdAndDelete(id);
+
       if (!getPurchaseAndDelete) {
         return res.json({ success: false, message: "Purchase not found" });
       }
