@@ -11,6 +11,8 @@ app.use(helmet());
 app.use(cors());
 app.use(morgan("dev"));
 
+// src\index.js
+
 mongoose
   .connect(
     "mongodb+srv://billingspherefuerte:VhjtujqeZDbYvn6o@billingsphere.sg7iac6.mongodb.net/billingSphere?retryWrites=true&w=majority"

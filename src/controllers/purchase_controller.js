@@ -123,7 +123,7 @@ const PurchaseController = {
       const id = req.params.id;
       
       // find purchase entry by id
-      const getPurchase = await PurchaseModel.findOne({ id });
+      const getPurchase = await PurchaseModel.findOne({ _id: id });
       // Iterate over the entries of the purchase
       for (const entry of getPurchase.entries) {
         const productId = entry.itemName;
@@ -133,7 +133,7 @@ const PurchaseController = {
         product.maximumStock -= quantity;
         await product.save();
       }
-      const getPurchaseAndDelete = await PurchaseModel.deleteOne({ id });
+      const getPurchaseAndDelete = await PurchaseModel.findByIdAndDelete(id);
       if (!getPurchaseAndDelete) {
         return res.json({ success: false, message: "Purchase not found" });
       }
