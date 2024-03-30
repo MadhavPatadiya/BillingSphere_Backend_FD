@@ -41,7 +41,9 @@ const SalesEntrySchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide a date for this sales entry."],
   },
-  dueAmount: { type: String, default: '0' },
+  dueAmount: { type: String, default: "0" },
+  cashAmount: { type: String, default: "0" },
+
   entries: [
     {
       itemName: {

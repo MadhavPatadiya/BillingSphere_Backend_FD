@@ -10,6 +10,7 @@ app.use(bodyParser.json({ limit: "10mb" }));
 app.use(helmet());
 app.use(cors());
 app.use(morgan("dev"));
+require("dotenv").config();
 
 // src\index.js
 
@@ -115,7 +116,6 @@ app.use("/api/company", CompanyRoutes);
 // Routes for barcode print
 const BarcodePrintRoutes = require("./routes/barcode_print_routes");
 app.use("/api/barcode-print", BarcodePrintRoutes);
-
 
 const PORT = 4567;
 app.listen(PORT, () => console.log(`Server started at PORT: ${PORT}`));
