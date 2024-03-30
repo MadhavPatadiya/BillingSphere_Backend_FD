@@ -25,7 +25,7 @@ const getItems = async (req, res) => {
     // get user_id from params
     const { user_id } = req.params;
     let page = parseInt(req.query.page) || 1;
-    let limit = parseInt(req.query.limit) || 5;
+    let limit = parseInt(req.query.limit) || 50;
 
     const skip = (page - 1) * limit;
 
