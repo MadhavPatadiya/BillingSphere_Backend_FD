@@ -149,13 +149,89 @@ const PurchaseController = {
         }
         await ledger.save();
       }
-      
+
       const getPurchaseAndDelete = await PurchaseModel.findByIdAndDelete(id);
 
       if (!getPurchaseAndDelete) {
         return res.json({ success: false, message: "Purchase not found" });
       }
       return res.json({ success: true, message: "Deleted Successfully!" });
+    } catch (ex) {
+      return res.json({ success: false, message: ex });
+    }
+  },
+
+  //For updating Purchase Entry
+  updatePurchase: async function (req, res) {
+    try {
+      const purchaseData = req.body;
+      const id = req.params.id;
+      const getPurchase = await PurchaseModel.findById(id);
+      const ledgerID = getPurchase.ledger;
+      const purchaseType = getPurchase.type;
+      const purchaseTotalAmount = parseFloat(getPurchase.totalamount);
+      const purchaseDueAmount = parseFloat(getPurchase.dueAmount);
+      const purchaseCashAmount = parseFloat(getPurchase.cashAmount);
+      const purchaseEntries = getPurchase.entries;
+
+      // Iterate over the entries of the purchase
+      for (const entry of purchaseEntries) {
+        const productId = entry.itemName;
+        const quantity = entry.qty;
+        const product = await Items.findById(productId);
+        // Update maximum stock
+        product.maximumStock -= quantity;
+        await product.save();
+      }
+
+      if (purchaseType === "Debit") {
+        const ledger = await Ledger.findById(ledgerID);
+
+        if (purchaseDueAmount == 0) {
+          const op = ledger.openingBalance + purchaseTotalAmount;
+          ledger.openingBalance = op;
+        } else if (getPurchase.dueAmount > 0) {
+          const op = purchaseTotalAmount - purchaseDueAmount;
+          ledger.openingBalance = op;
+        }
+        await ledger.save();
+      }
+
+      const updatedPurchase = await PurchaseModel.findByIdAndUpdate(
+        id,
+        purchaseData,
+        { new: true }
+      );
+
+      if (!updatedPurchase) {
+        return res.json({ success: false, message: "Purchase not found" });
+      }
+
+      for (const entry of purchaseData.entries) {
+        const productId = entry.itemName;
+        const quantity = entry.qty;
+        const sellingPrice = entry.sellingPrice;
+
+        const product = await Items.findById(productId);
+
+        if (!product) {
+          return res.json({
+            success: false,
+            message: "Product not found.",
+          });
+        }
+
+        // Update maximum stock
+        product.maximumStock += quantity;
+        product.price = sellingPrice;
+        await product.save();
+      }
+
+      return res.json({
+        success: true,
+        message: "Purchase entry updated successfully!",
+        data: updatedPurchase,
+      });
     } catch (ex) {
       return res.json({ success: false, message: ex });
     }

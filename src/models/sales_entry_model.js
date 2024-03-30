@@ -127,7 +127,7 @@ const SalesEntrySchema = new mongoose.Schema({
   remark: {
     type: String,
     trim: true,
-    required: [true, "Please provide a remark for this sales entry."],
+    required: [false, "Please provide a remark for this sales entry."],
   },
 });
 

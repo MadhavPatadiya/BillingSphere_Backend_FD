@@ -9,11 +9,17 @@ PurchaseRoutes.get(
   PurchaseController.fetchAllPurchase
 );
 PurchaseRoutes.post("/create", verifyToken, PurchaseController.createPurchase);
-PurchaseRoutes.get("/:id", verifyToken, PurchaseController.fetchPurchseById);
+PurchaseRoutes.get("/get/:id", verifyToken, PurchaseController.fetchPurchseById);
 PurchaseRoutes.delete(
   "/delete/:id",
   // verifyToken,
   PurchaseController.deletePurchaseById
+);
+// updating purchase entry
+PurchaseRoutes.put(
+  "/update/:id",
+  verifyToken,
+  PurchaseController.updatePurchase
 );
 
 module.exports = PurchaseRoutes;
