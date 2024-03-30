@@ -61,13 +61,9 @@ const UserController = {
       }
 
       // Generate JWT token
-      const token = jwt.sign(
-        { userId: foundUser._id },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: process.env.JWT_EXPIRATION,
-        }
-      );
+      const token = jwt.sign({ userId: foundUser._id }, "your-secret-key", {
+        expiresIn: "1h",
+      });
 
       console.log(token);
 
