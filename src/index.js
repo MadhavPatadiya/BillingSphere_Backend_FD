@@ -119,3 +119,6 @@ app.use("/api/barcode-print", BarcodePrintRoutes);
 
 const PORT = 4567;
 app.listen(PORT, () => console.log(`Server started at PORT: ${PORT}`));
+
+console.log(process.env.JWT_SECRET);
+console.log(process.env.JWT_EXPIRATION);
