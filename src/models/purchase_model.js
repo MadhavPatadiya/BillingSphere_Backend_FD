@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 const purchaseSchema = new mongoose.Schema({
     no: { type: String, required: true },
-    user_id: { type: String, required: true },
+    companyCode: {
+        type: String,
+        ref: "NewCompany",
+        required: true,
+    },
     date: { type: String, required: true },
     date2: { type: String, required: true },
     type: { type: String, required: true },

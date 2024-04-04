@@ -4,7 +4,7 @@ const verifyToken = require("../middleware/verifyToken");
 
 //For getting all purchase entry
 PurchaseRoutes.get(
-  "/fetchAll/:user_id",
+  "/fetchAll/:companyCode",
   verifyToken,
   PurchaseController.fetchAllPurchase
 );

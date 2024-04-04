@@ -14,9 +14,11 @@ require("dotenv").config();
 
 // src\index.js
 
+// I changed the following line:
+
 mongoose
   .connect(
-    "mongodb+srv://billingspherefuerte:VhjtujqeZDbYvn6o@billingsphere.sg7iac6.mongodb.net/billingSphere?retryWrites=true&w=majority"
+    "mongodb+srv://johngospel003:LlJ6bdJ35zCzc53O@cluster0.efot3tr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
   )
   .then(() => {
     console.log("Connected to database");
@@ -116,6 +118,10 @@ app.use("/api/company", CompanyRoutes);
 // Routes for barcode print
 const BarcodePrintRoutes = require("./routes/barcode_print_routes");
 app.use("/api/barcode-print", BarcodePrintRoutes);
+
+//Routes for receipt
+const ReceiptVoucherRoutes = require("./routes/receipt_voucher_routes");
+app.use("/api/receipt-voucher", ReceiptVoucherRoutes);
 
 const PORT = 4567;
 app.listen(PORT, () => console.log(`Server started at PORT: ${PORT}`));

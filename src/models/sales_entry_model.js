@@ -7,13 +7,14 @@ const SalesEntrySchema = new mongoose.Schema({
   },
   date: {
     type: String,
-    required: [true, "Please provide a date for this sales entry."],
+    required: [true, " provide a date for this sales entry."],
   },
-  user_id: {
+  companyCode: {
     type: String,
-    required: [true, "Please provide a type for this sales entry."],
-  },
-  type: {
+    ref: "NewCompany",
+    required: true,
+},
+type: {
     type: String,
     trim: true,
     required: [true, "Please provide a type for this sales entry."],

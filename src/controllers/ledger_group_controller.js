@@ -31,9 +31,9 @@ const deleteLedgerGroup = async (req, res) => {
 
 const getAllLedgerGroup = async (req, res) => {
   try {
-    const { user_id } = req.params;
+    const { companyCode } = req.params;
 
-    const ledgerGroups = await LedgerGroup.find({ user_id: user_id });
+    const ledgerGroups = await LedgerGroup.find({ companyCode: companyCode });
     return res.json({ success: true, data: ledgerGroups });
   } catch (ex) {
     return res.json({ success: false, message: ex });
@@ -41,3 +41,5 @@ const getAllLedgerGroup = async (req, res) => {
 };
 
 module.exports = { createLedgerGroup, deleteLedgerGroup, getAllLedgerGroup };
+
+

@@ -42,10 +42,11 @@ const PaymentSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  user_id: {
+  companyCode: {
     type: String,
-    required: false,
-  },
+    ref: "NewCompany",
+    required: true,
+},
 });
 
 module.exports = mongoose.model("Payment", PaymentSchema);

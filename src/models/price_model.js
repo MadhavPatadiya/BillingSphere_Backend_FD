@@ -1,12 +1,12 @@
 const { Schema, model, mongoose } = require("mongoose");
 
 const priceSchema = new Schema({
-  user_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: [true, "price category is required"],
-  },
-  priceCategoryType: {
+  companyCode: {
+    type: String,
+    ref: "NewCompany",
+    required: true,
+},
+priceCategoryType: {
     type: String,
     required: [true, "price category is required"],
   },

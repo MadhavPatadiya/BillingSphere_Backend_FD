@@ -4,7 +4,7 @@ const UserModel = require("../models/user_model");
 // Middleware to restrict access based on user type
 function restrictAccessByUserType(allowedTypes) {
   return (req, res, next) => {
-    const userId = req.userId; // Assuming userId is available in the request
+    const { userId } = req.params; // Assuming userId is available in the request
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized" });
     }

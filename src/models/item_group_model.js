@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 
 const ItemsGroupSchema = new mongoose.Schema({
-  user_id: {
+  companyCode: {
     type: String,
+    ref: "NewCompany",
     required: true,
   },
   name: {

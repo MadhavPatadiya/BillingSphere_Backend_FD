@@ -21,7 +21,7 @@ LedgerRoutes.delete(
   LedgerController.deleteLedger
 );
 LedgerRoutes.get(
-  "/get-all-ledger/:user_id",
+  "/get-all-ledger/:companyCode",
   verifyToken,
   LedgerController.getAllLedger
 );

@@ -91,8 +91,8 @@ const PurchaseController = {
 
   fetchAllPurchase: async function (req, res) {
     try {
-      const { user_id } = req.params;
-      const fetchAllPurchase = await PurchaseModel.find({ user_id: user_id });
+      const { companyCode } = req.params;
+      const fetchAllPurchase = await PurchaseModel.find({ companyCode: companyCode });
       return res.json({ success: true, data: fetchAllPurchase });
     } catch (ex) {
       return res.json({ success: false, message: ex });
@@ -236,6 +236,11 @@ const PurchaseController = {
       return res.json({ success: false, message: ex });
     }
   },
+
+  // Search Purchase Entries by a particular ID
+  
 };
 
 module.exports = PurchaseController;
+
+

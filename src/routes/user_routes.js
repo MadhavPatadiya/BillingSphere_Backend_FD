@@ -4,7 +4,7 @@ const restrictAccessByUserType = require("../middleware/restriction");
 
 UserRoutes.post("/createAccount", UserController.createAccount);
 UserRoutes.post(
-  "/createAccount2",
+  "/createAccount2/:userId",
   restrictAccessByUserType(["Admin"]),
   UserController.createAccount2
 );

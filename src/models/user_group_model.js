@@ -2,7 +2,11 @@ const mongoose = require("mongoose");
 
 // Define the schema
 const userGroupSchema = new mongoose.Schema({
-  user_id: { type: String, required: true },
+  companyCode: {
+    type: String,
+    ref: "NewCompany",
+    required: true,
+  },
   userGroupName: { type: String, required: true },
   ownerGroup: { type: String, default: "" },
   misReport: { type: String, default: "" },
@@ -33,5 +37,3 @@ const userGroupSchema = new mongoose.Schema({
 const UserGroup = mongoose.model("UserGroup", userGroupSchema);
 
 module.exports = UserGroup;
-
-

@@ -10,10 +10,12 @@ const userSchema = new Schema({
     dashboardAccess: { type: String, default: "Yes" },
     dashboardCategory: { type: String, default: "Yes" },
     backDateEntry: { type: String, default: "Yes" },
+    companies: [{ type: String, ref: 'NewCompany', default: null }],
     password: { type: String, required: true },
     updatedOn: { type: Date },
     creatededOn: { type: Date },
 });
+
 userSchema.pre("save", function (next) {
     this.id = uuid.v1();
     this.updatedOn = new Date();

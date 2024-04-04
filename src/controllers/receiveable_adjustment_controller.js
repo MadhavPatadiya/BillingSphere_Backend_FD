@@ -34,5 +34,3 @@ const fetchReceivable = async (req, res) => {
 };
 
 module.exports = { fetchReceivable };
-
-

@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
+const Barcode = require("./barcode_print_model");
 
 const ItemsSchema = new mongoose.Schema({
+  companyCode: {
+    type: String,
+    ref: "NewCompany",
+    required: true,
+  },
   itemGroup: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "ItemGroup",
@@ -10,10 +16,6 @@ const ItemsSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "ItemBrand",
     required: true,
-  },
-  user_id: {
-    type: String,
-    required: false,
   },
   itemName: {
     type: String,
@@ -38,8 +40,8 @@ const ItemsSchema = new mongoose.Schema({
     required: true,
   },
   barcode: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "BarcodePrint",
+    type: String,
+    // ref: "BarcodePrint",
     required: false,
   },
   storeLocation: {
@@ -135,10 +137,18 @@ const ItemsSchema = new mongoose.Schema({
   },
 });
 
-ItemsSchema.pre("save", function (next) {
-  this.updateOn = new Date();
-  this.createdOn = new Date();
-  next();
+ItemsSchema.pre("save", async function (next) {
+  try {
+    this.updateOn = new Date();
+    this.createdOn = new Date();
+    const barcodeDoc = await Barcode.create({ barcode: this.barcode });
+    this.barcode = barcodeDoc._id;
+    console.log("Barcode: ", barcodeDoc._id);
+    next();
+  } catch (error) {
+    console.log("Error: ", error);
+    next(error);
+  }
 });
 
 module.exports = mongoose.model("Items", ItemsSchema);

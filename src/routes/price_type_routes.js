@@ -4,7 +4,7 @@ const verifyToken = require("../middleware/verifyToken");
 
 //For Getting all price type
 PriceTypeRoutes.get(
-  "/fetchAllPriceType/:user_id",
+  "/fetchAllPriceType/:companyCode",
   verifyToken,
   PriceController.fetchAllPriceType
 );

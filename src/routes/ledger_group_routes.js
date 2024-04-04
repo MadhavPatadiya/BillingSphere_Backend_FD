@@ -15,7 +15,7 @@ LedgerGroupRoutes.delete(
 );
 
 LedgerGroupRoutes.get(
-  "/get-all/:user_id",
+  "/get-all/:companyCode",
   verifyToken,
   LedgerGroupController.getAllLedgerGroup
 );

@@ -32,6 +32,97 @@ const NewCompanySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  city: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  pincode: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  status: {
+    type: String,
+    required: true,
+    default: "",
+  },
+  tagline: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  lstNo: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  cstNo: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  gstin: {
+    type: String,
+    required: false,
+
+    default: "",
+  },
+  signatory: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  designation: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  pan: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  ewayBill: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  caching: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  bankName: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  accNo: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  accName: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  branch: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  ifsc: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  upi: {
+    type: String,
+    required: false,
+    default: "",
+  },
   taxation: {
     type: String,
     required: true,
@@ -52,6 +143,54 @@ const NewCompanySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  logo1: [
+    {
+      data: {
+        type: Buffer,
+        required: true,
+      },
+      contentType: {
+        type: String,
+        required: true,
+      },
+      filename: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+  logo2: [
+    {
+      data: {
+        type: Buffer,
+        required: true,
+      },
+      contentType: {
+        type: String,
+        required: true,
+      },
+      filename: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+  signature: [
+    {
+      data: {
+        type: Buffer,
+        required: true,
+      },
+      contentType: {
+        type: String,
+        required: true,
+      },
+      filename: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
 NewCompanySchema.pre("save", async function (next) {
@@ -66,9 +205,10 @@ NewCompanySchema.pre("save", async function (next) {
 
       const user = new User({
         email: this.emailID,
-        password: hashedPassword,
+        password: this.password,
         fullName: this.companyName,
         usergroup: "Admin",
+        companies: [this.companyCode],
       });
       await user.save();
     } catch (error) {

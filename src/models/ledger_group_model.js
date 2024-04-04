@@ -6,9 +6,9 @@ const LedgerGroupSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  user_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+  companyCode: {
+    type: String,
+    ref: "NewCompany",
     required: true,
   },
 });
