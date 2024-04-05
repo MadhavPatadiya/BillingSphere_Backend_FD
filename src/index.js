@@ -26,6 +26,11 @@ mongoose
     console.log("Connected to database");
   });
 
+
+app.get('/', (res, req) => {
+  res.send("Hello World")
+});
+
 //Routes for creating User
 const UserRoutes = require("./routes/user_routes");
 app.use("/api/user", UserRoutes);
