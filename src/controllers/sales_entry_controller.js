@@ -185,7 +185,7 @@ const getSingleSales = async (req, res) => {
   }
 };
 
-const generateReceiptPDF = (salesData, callback) => {
+const generateReceiptPDF = async (salesData, callback) => {
   const doc = new pdfdocument({
     autoFirstPage: false,
   });
@@ -232,8 +232,17 @@ const generateReceiptPDF = (salesData, callback) => {
     });
 
   doc.addPage();
+    const populatedEntries = await Promise.all(
+      salesData.entries.map(async (entry) => {
+        const item = await Items.findById(entry.itemName);
+        if (item) {
+          return { ...entry.toObject(), itemName: item.itemName }; 
+        }
+        return entry; 
+      })
+    );
 
-  table.addBody(salesData.entries);
+  table.addBody(populatedEntries);
 
   const buffers = [];
   doc.on('data', buffers.push.bind(buffers));
