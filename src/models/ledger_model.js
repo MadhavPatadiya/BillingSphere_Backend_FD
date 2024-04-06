@@ -41,11 +41,16 @@ const ledgerSchema = new mongoose.Schema({
     type: String,
     required: [false, "Please provide a ledger type for this ledger."],
   },
-  priceListCategory: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Price",
-    required: [false, "Please provide a credit limit for this ledger."],
+    priceListCategory: {
+    type: String,
+    required: [false, "Please provide a ledger type for this ledger."],
   },
+
+  // priceListCategory: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Price",
+  //   required: [false, "Please provide a credit limit for this ledger."],
+  // },
   remarks: {
     type: String,
     required: [false, "Please provide remark for this ledger."],
