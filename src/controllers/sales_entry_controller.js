@@ -1,8 +1,9 @@
 const SalesEntry = require("../models/sales_entry_model");
 const Items = require("../models/items_model");
 const Ledger = require("../models/ledger_model");
-const fs = require('fs');
-const pdfkit = require('pdfkit');
+const fs = require("fs");
+const pdfdocument = require("pdfkit");
+const pdfTable = require("voilab-pdf-table");
 
 //For Creating Sales
 const createSales = async (req, res) => {
@@ -170,32 +171,85 @@ const getSingleSales = async (req, res) => {
       return res.json({ success: false, message: "Sales Entry not found" });
     }
 
-    generateReceiptPDF(sales);
-
-    res.download(`receipt_${sales._id}.pdf`);
-    // return res.json({ success: true, data: sales });
+    generateReceiptPDF(sales, (filePath) => {
+      // Send the PDF file as a download response
+      res.download(filePath, `receipt_${sales._id}.pdf`, (err) => {
+        if (err) {
+          return res.status(500).json({ success: false, message: "Error downloading PDF" });
+        }
+        fs.unlinkSync(filePath);
+      });
+    });
   } catch (ex) {
-    return res.json({ success: false, message: ex });
+    return res.status(500).json({ success: false, message: ex });
   }
 };
 
-const generateReceiptPDF = (salesData) => {
-  const doc = new pdfkit();
-  // Customize the PDF content based on your requirements
-  doc.text(`Receipt for Sales Entry ${salesData._id}`);
-  doc.text(`Date: ${salesData.date}`);
-  // Add more details as needed
-  
-  // Save the PDF to a buffer
+const generateReceiptPDF = (salesData, callback) => {
+  const doc = new pdfdocument({
+    autoFirstPage: false,
+  });
+
+  const table = new pdfTable(doc, {
+    bottomMargin: 30,
+  });
+
+  table
+    .addPlugin(
+      new (require("voilab-pdf-table/plugins/fitcolumn"))({
+        column: "description",
+      })
+    )
+    .setColumnsDefaults({
+      headerBorder: "B",
+      align: "right",
+    })
+    .addColumns([
+      {
+        id: "itemName",
+        header: "Item Name",
+        align: "left",
+        width: 300,
+      },
+      {
+        id: "qty",
+        header: "Quantity",
+        width: 50,
+      },
+      {
+        id: "rate",
+        header: "Rate",
+        width: 50,
+      },
+      {
+        id: "amount",
+        header: "Amount",
+        width: 50,
+      },
+    ])
+    .onPageAdded(function (tb) {
+      tb.addHeader();
+    });
+
+  doc.addPage();
+
+  table.addBody(salesData.entries);
+
   const buffers = [];
   doc.on('data', buffers.push.bind(buffers));
   doc.on('end', () => {
     const pdfData = Buffer.concat(buffers);
-    // Save the PDF to a file
-    fs.writeFileSync(`receipt_${salesData._id}.pdf`, pdfData);
+
+    const fileName = `receipt_${salesData._id}.pdf`;
+    const filePath = `${__dirname}/${fileName}`;
+    fs.writeFileSync(filePath, pdfData);
+
+    callback(filePath);
   });
+
   doc.end();
 };
+
 
 module.exports = {
   createSales,
@@ -204,5 +258,3 @@ module.exports = {
   getAllSales,
   getSingleSales,
 };
-
-
