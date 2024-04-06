@@ -16,7 +16,6 @@ SalesEntryRoutes.delete(
 SalesEntryRoutes.get("/get-all", verifyToken, SalesEntryController.getAllSales);
 SalesEntryRoutes.get(
   "/get-single/:id",
-  verifyToken,
   SalesEntryController.getSingleSales
 );
 
