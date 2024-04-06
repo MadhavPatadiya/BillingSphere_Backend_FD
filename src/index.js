@@ -126,6 +126,10 @@ app.use("/api/company", CompanyRoutes);
 const BarcodePrintRoutes = require("./routes/barcode_print_routes");
 app.use("/api/barcode-print", BarcodePrintRoutes);
 
+//Routes for receipt
+const ReceiptVoucherRoutes = require("./routes/receipt_voucher_routes");
+app.use("/api/receipt-voucher", ReceiptVoucherRoutes);
+
 const PORT = 4567;
 app.listen(PORT, () => console.log(`Server started at PORT: ${PORT}`));
 
