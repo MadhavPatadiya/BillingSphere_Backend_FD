@@ -11,10 +11,6 @@ const ReceiptVoucherController = {
             const ledgerID = receiptData.ledger;
             const receiptType = receiptData.account;
 
-            console.log(debit);
-            console.log(credit);
-            console.log(receiptType);
-
             if (receiptType == "Dr") {
                 const ledgerfetch = await Ledger.findById(ledgerID);
                 ledgerfetch.openingBalance -= parseFloat(debit); // Parse debit as float
