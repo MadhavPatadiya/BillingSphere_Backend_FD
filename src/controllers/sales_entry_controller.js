@@ -163,8 +163,8 @@ const getAllSales = async (req, res) => {
   }
 };
 
-// Get single sales
-const getSingleSales = async (req, res) => {
+// Download Receipt
+const downloadReceipt = async (req, res) => {
   try {
     const sales = await SalesEntry.findOne({ _id: req.params.id });
     if (!sales) {
@@ -175,7 +175,9 @@ const getSingleSales = async (req, res) => {
       // Send the PDF file as a download response
       res.download(filePath, `receipt_${sales._id}.pdf`, (err) => {
         if (err) {
-          return res.status(500).json({ success: false, message: "Error downloading PDF" });
+          return res
+            .status(500)
+            .json({ success: false, message: "Error downloading PDF" });
         }
         fs.unlinkSync(filePath);
       });
@@ -232,21 +234,21 @@ const generateReceiptPDF = async (salesData, callback) => {
     });
 
   doc.addPage();
-    const populatedEntries = await Promise.all(
-      salesData.entries.map(async (entry) => {
-        const item = await Items.findById(entry.itemName);
-        if (item) {
-          return { ...entry.toObject(), itemName: item.itemName }; 
-        }
-        return entry; 
-      })
-    );
+  const populatedEntries = await Promise.all(
+    salesData.entries.map(async (entry) => {
+      const item = await Items.findById(entry.itemName);
+      if (item) {
+        return { ...entry.toObject(), itemName: item.itemName };
+      }
+      return entry;
+    })
+  );
 
   table.addBody(populatedEntries);
 
   const buffers = [];
-  doc.on('data', buffers.push.bind(buffers));
-  doc.on('end', () => {
+  doc.on("data", buffers.push.bind(buffers));
+  doc.on("end", () => {
     const pdfData = Buffer.concat(buffers);
 
     const fileName = `receipt_${salesData._id}.pdf`;
@@ -259,6 +261,17 @@ const generateReceiptPDF = async (salesData, callback) => {
   doc.end();
 };
 
+const getSingleSales = async (req, res) => {
+  try {
+    const sales = await SalesEntry.findOne({ _id: req.params.id });
+    if (!sales) {
+      return res.json({ success: false, message: "Sales Entry not found" });
+    }
+    return res.json({ success: true, data: sales });
+  } catch (ex) {
+    return res.json({ success: false, message: ex });
+  }
+};
 
 module.exports = {
   createSales,
@@ -266,4 +279,5 @@ module.exports = {
   deleteSales,
   getAllSales,
   getSingleSales,
+  downloadReceipt,
 };

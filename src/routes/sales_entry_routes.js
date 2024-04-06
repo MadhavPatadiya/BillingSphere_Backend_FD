@@ -18,5 +18,10 @@ SalesEntryRoutes.get(
   "/get-single/:id",
   SalesEntryController.getSingleSales
 );
+// Download receipt
+SalesEntryRoutes.get(
+  "/download-receipt/:id",
+  SalesEntryController.downloadReceipt
+);
 
 module.exports = SalesEntryRoutes;
