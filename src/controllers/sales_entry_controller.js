@@ -1,6 +1,8 @@
 const SalesEntry = require("../models/sales_entry_model");
 const Items = require("../models/items_model");
 const Ledger = require("../models/ledger_model");
+const fs = require('fs');
+const pdfkit = require('pdfkit');
 
 //For Creating Sales
 const createSales = async (req, res) => {
@@ -167,10 +169,32 @@ const getSingleSales = async (req, res) => {
     if (!sales) {
       return res.json({ success: false, message: "Sales Entry not found" });
     }
-    return res.json({ success: true, data: sales });
+
+    generateReceiptPDF(sales);
+
+    res.download(`receipt_${sales._id}.pdf`);
+    // return res.json({ success: true, data: sales });
   } catch (ex) {
     return res.json({ success: false, message: ex });
   }
+};
+
+const generateReceiptPDF = (salesData) => {
+  const doc = new pdfkit();
+  // Customize the PDF content based on your requirements
+  doc.text(`Receipt for Sales Entry ${salesData._id}`);
+  doc.text(`Date: ${salesData.date}`);
+  // Add more details as needed
+  
+  // Save the PDF to a buffer
+  const buffers = [];
+  doc.on('data', buffers.push.bind(buffers));
+  doc.on('end', () => {
+    const pdfData = Buffer.concat(buffers);
+    // Save the PDF to a file
+    fs.writeFileSync(`receipt_${salesData._id}.pdf`, pdfData);
+  });
+  doc.end();
 };
 
 module.exports = {
