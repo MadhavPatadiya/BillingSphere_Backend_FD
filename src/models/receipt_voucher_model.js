@@ -125,5 +125,3 @@ const ReceiptVoucherSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("ReceiptVoucher", ReceiptVoucherSchema);
-
-
