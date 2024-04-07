@@ -5,16 +5,21 @@ const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const cors = require("cors");
+const fs = require("fs");
+const file = fs.readFileSync("./E68F10DAB50E5FACF7DCEA9204C1178E.txt");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(helmet());
 app.use(cors());
 app.use(morgan("dev"));
 require("dotenv").config();
+app.get("/.well-known/pki-validation/E68F10DAB50E5FACF7DCEA9204C1178E.txt", (req, res) => {
+  res.sendFile("E68F10DAB50E5FACF7DCEA9204C1178E.txt");
+});
+
 
 // src\index.js
 
-// I changed the following line:
 
 mongoose
   .connect(
