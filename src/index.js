@@ -2,21 +2,25 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const https = require("https");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const cors = require("cors");
 const fs = require("fs");
-const file = fs.readFileSync("./3C7E76BC3573DFB7F40C88FEF49BF4C4.txt");
+const key = fs.readFileSync("private.key");
+const cert = fs.readFileSync("certificate.crt");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(helmet());
 app.use(cors());
 app.use(morgan("dev"));
 require("dotenv").config();
-app.get("/.well-known/pki-validation/3C7E76BC3573DFB7F40C88FEF49BF4C4.txt", (req, res) => {
-  res.sendFile("/home/ubuntu/BillingSphere_Backend/3C7E76BC3573DFB7F40C88FEF49BF4C4.txt");
-});
 
+
+const cred = {
+  key,
+  cert,
+}
 
 
 // src\index.js
@@ -139,5 +143,8 @@ app.use("/api/receipt-voucher", ReceiptVoucherRoutes);
 const PORT = 4567;
 app.listen(PORT, () => console.log(`Server started at PORT: ${PORT}`));
 
-console.log(process.env.JWT_SECRET);
-console.log(process.env.JWT_EXPIRATION);
+const httpsServer = https.createServer(cred, app);
+httpsServer.listen(8443, () => {
+  console.log("HTTPS Server running on port 443");
+});
+
