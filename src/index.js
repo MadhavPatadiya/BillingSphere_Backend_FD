@@ -16,6 +16,9 @@ app.use(cors());
 app.use(morgan("dev"));
 require("dotenv").config();
 
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
 
 const cred = {
   key,
