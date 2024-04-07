@@ -14,7 +14,7 @@ app.use(cors());
 app.use(morgan("dev"));
 require("dotenv").config();
 app.get("/.well-known/pki-validation/E68F10DAB50E5FACF7DCEA9204C1178E.txt", (req, res) => {
-  res.sendFile("E68F10DAB50E5FACF7DCEA9204C1178E.txt");
+  res.sendFile("./E68F10DAB50E5FACF7DCEA9204C1178E.txt");
 });
 
 
