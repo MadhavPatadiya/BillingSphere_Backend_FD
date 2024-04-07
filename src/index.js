@@ -6,15 +6,15 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const cors = require("cors");
 const fs = require("fs");
-const file = fs.readFileSync("./E68F10DAB50E5FACF7DCEA9204C1178E.txt");
+const file = fs.readFileSync("./3C7E76BC3573DFB7F40C88FEF49BF4C4.txt");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(helmet());
 app.use(cors());
 app.use(morgan("dev"));
 require("dotenv").config();
-app.get("/.well-known/pki-validation/E68F10DAB50E5FACF7DCEA9204C1178E.txt", (req, res) => {
-  res.sendFile("/home/ubuntu/BillingSphere_Backend/E68F10DAB50E5FACF7DCEA9204C1178E.txt");
+app.get("/.well-known/pki-validation/3C7E76BC3573DFB7F40C88FEF49BF4C4.txt", (req, res) => {
+  res.sendFile("/home/ubuntu/BillingSphere_Backend/3C7E76BC3573DFB7F40C88FEF49BF4C4.txt");
 });
 
 
