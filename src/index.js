@@ -17,6 +17,9 @@ app.get("/.well-known/pki-validation/3C7E76BC3573DFB7F40C88FEF49BF4C4.txt", (req
   res.sendFile("/home/ubuntu/BillingSphere_Backend/3C7E76BC3573DFB7F40C88FEF49BF4C4.txt");
 });
 
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
 
 
 // src\index.js
