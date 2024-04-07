@@ -14,8 +14,9 @@ app.use(cors());
 app.use(morgan("dev"));
 require("dotenv").config();
 app.get("/.well-known/pki-validation/E68F10DAB50E5FACF7DCEA9204C1178E.txt", (req, res) => {
-  res.sendFile("./E68F10DAB50E5FACF7DCEA9204C1178E.txt");
+  res.sendFile("/home/johnf/Documents/BillingSphere_Backend/E68F10DAB50E5FACF7DCEA9204C1178E.txt");
 });
+
 
 
 // src\index.js
