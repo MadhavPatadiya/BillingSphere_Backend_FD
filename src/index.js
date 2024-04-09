@@ -31,7 +31,8 @@ const cred = {
 
 mongoose
   .connect(
-    "mongodb://13.60.61.193:27017/BillingSphere2"
+    "mongodb+srv://billingspherefuerte:VhjtujqeZDbYvn6o@billingsphere.sg7iac6.mongodb.net/billingSphere?retryWrites=true&w=majority"
+    // "mongodb://13.60.61.193:27017/BillingSphere2"
   )
   .then(() => {
     console.log("Connected to database");
