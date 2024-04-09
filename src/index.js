@@ -143,6 +143,10 @@ app.use("/api/barcode-print", BarcodePrintRoutes);
 const ReceiptVoucherRoutes = require("./routes/receipt_voucher_routes");
 app.use("/api/receipt-voucher", ReceiptVoucherRoutes);
 
+// Routes for inward challan
+const InwardChallanRoutes = require("./routes/inward_challan_routes");
+app.use("/api/inward-challan", InwardChallanRoutes);
+
 const PORT = 4567;
 app.listen(PORT, () => console.log(`Server started at PORT: ${PORT}`));
 
