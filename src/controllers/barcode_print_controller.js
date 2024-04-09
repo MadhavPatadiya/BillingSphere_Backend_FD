@@ -48,6 +48,8 @@ const createBarcodeImage = async (req, res) => {
     const numBarcodes = parseInt(req.params.numBarcodes); // Number of barcodes requested
     const barcodeValue = req.params.barcodeValue; // Barcode value to be used for all barcodes
 
+console.log(numBarcodes, barcodeValue);
+
     const barcodeImages = [];
     for (let i = 0; i < numBarcodes; i++) {
       const canvas = createCanvas();

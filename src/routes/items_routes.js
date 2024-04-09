@@ -19,6 +19,10 @@ router.get("/get-items/:companyCode", verifyToken, ItemsController.getItems);
 // Get a specific item by ID
 router.get("/get-item/:itemId", verifyToken, ItemsController.getItemById);
 
+
+// Get a items by Category
+router.get("/get-items-by-group/:category", ItemsController.getItemsByGroup);
+
 // Update a specific item by ID
 router.put("/update-item/:itemId", verifyToken, ItemsController.updateItem);
 

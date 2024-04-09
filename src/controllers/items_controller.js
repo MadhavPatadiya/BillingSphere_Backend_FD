@@ -110,6 +110,17 @@ const getItemByBarCode = async (req, res) => {
   }
 };
 
+// Get Items by Group
+const getItemsByGroup = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const items = await Items.find({ itemGroup: category });
+    res.json({ success: true, data: items });
+  } catch (ex) {
+    res.json({ success: false, message: ex });
+  }
+};
+
 // Helper Function to Update Specific Fields in All Items, Don't use
 // const updateAllItems = async (req, res) => {
 //   try {
@@ -325,11 +336,10 @@ module.exports = {
   createItem,
   getItems,
   getItemById,
+  getItemsByGroup,
   updateItem,
   deleteItem,
   getItemByBarCode,
   insertItemsIntoDB,
   updateAllItems,
 };
-
-
