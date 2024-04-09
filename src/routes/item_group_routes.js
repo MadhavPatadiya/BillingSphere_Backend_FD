@@ -14,7 +14,7 @@ router.post(
 );
 
 // Get all item groups
-router.get("/get", verifyToken, ItemsGroupController.getItemGroups);
+router.get("/get", ItemsGroupController.getItemGroups);
 
 // Get a specific item group by ID
 router.get(
