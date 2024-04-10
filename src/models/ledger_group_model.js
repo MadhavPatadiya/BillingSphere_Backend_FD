@@ -6,11 +6,6 @@ const LedgerGroupSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  companyCode: {
-    type: String,
-    ref: "NewCompany",
-    required: true,
-  },
 });
 
 LedgerGroupSchema.pre("remove", { document: true }, async function (next) {

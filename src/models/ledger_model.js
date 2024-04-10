@@ -159,12 +159,6 @@ const ledgerSchema = new mongoose.Schema({
   registrationTypeDated: {
     type: String,
   },
-  companyCode: {
-    type: String,
-    ref: "NewCompany",
-    required: true,
-},
-
 });
 
 module.exports = mongoose.model("Ledger", ledgerSchema);

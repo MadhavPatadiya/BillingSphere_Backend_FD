@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 
 // Define the schema
 const userGroupSchema = new mongoose.Schema({
-  companyCode: {
-    type: String,
-    ref: "NewCompany",
-    required: true,
-  },
   userGroupName: { type: String, required: true },
   ownerGroup: { type: String, default: "" },
   misReport: { type: String, default: "" },
