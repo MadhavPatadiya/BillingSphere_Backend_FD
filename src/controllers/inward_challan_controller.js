@@ -1,5 +1,6 @@
 const InwardChallanModel = require("../models/inward_challan_model");
 const ProductStockModel = require("../models/product_stock_model");
+const ItemModel = require("../models/items_model");
 
 // For creating a new inward challan
 
@@ -15,6 +16,12 @@ const createInwardChallan = async (req, res) => {
         price: entry.rate,
         selling_price: entry.netAmount,
       });
+
+      // Get the item from the item model and update the stock
+      const item = await ItemModel.findById(entry.itemName);
+      item.maximumStock -= entry.qty;
+
+      await item.save();
       await productStock.save();
     }
     await inwardChallan.save();
