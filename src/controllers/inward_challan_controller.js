@@ -1,10 +1,22 @@
 const InwardChallanModel = require("../models/inward_challan_model");
+const ProductStockModel = require("../models/product_stock_model");
 
 // For creating a new inward challan
 
 const createInwardChallan = async (req, res) => {
   try {
     const inwardChallan = new InwardChallanModel(req.body);
+    // Iterate over the entries and save a new product stock for each entry
+    for (let entry of req.body.entries) {
+      const productStock = new ProductStockModel({
+        company: req.body.companyCode,
+        product: entry.itemName,
+        quantity: entry.qty,
+        price: entry.rate,
+        selling_price: entry.netAmount,
+      });
+      await productStock.save();
+    }
     await inwardChallan.save();
     res.status(201).send(inwardChallan);
   } catch (error) {

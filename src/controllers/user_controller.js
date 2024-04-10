@@ -65,8 +65,6 @@ const UserController = {
         expiresIn: "6h",
       });
 
-      console.log(token);
-
       return res.json({ success: true, data: foundUser, token: token });
     } catch (ex) {
       return res.json({ success: false, message: "error" });

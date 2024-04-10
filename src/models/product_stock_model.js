@@ -1,41 +1,29 @@
 const mongoose = require("mongoose");
 const productStockSchema = new mongoose.Schema({
-  productid: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Products",
-      required: true,
-    },
-  ],
+  company: {
+    type: String,
+    ref: "Company",
+    required: true,
+  },
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Items",
+    required: true,
+  },
   quantity: {
     type: Number,
   },
   price: {
     type: Number,
-    required: true,
-  },
-  mfgdate: {
-    type: Number,
-    required: true,
-  },
-  expdate: {
-    type: Number,
-    required: true,
+    default: 0.0,
   },
   selling_price: {
     type: Number,
-    required: true,
+    default: 0.0,
   },
-  sub_categories: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "SubCategory",
-      required: true,
-    },
-  ],
   isActive: {
-    type: Boolean,
-    default: true,
+    type: String,
+    default: "Yes",
   },
 });
 
