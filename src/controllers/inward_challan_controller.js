@@ -3,32 +3,54 @@ const ProductStockModel = require("../models/product_stock_model");
 const ItemModel = require("../models/items_model");
 
 // For creating a new inward challan
-
 const createInwardChallan = async (req, res) => {
-  try {
+    try {
     const inwardChallan = new InwardChallanModel(req.body);
-    // Iterate over the entries and save a new product stock for each entry
     for (let entry of req.body.entries) {
-      const productStock = new ProductStockModel({
-        company: req.body.companyCode,
-        product: entry.itemName,
-        quantity: entry.qty,
-        price: entry.rate,
-        selling_price: entry.netAmount,
-      });
-
-      // Get the item from the item model and update the stock
       const item = await ItemModel.findById(entry.itemName);
       item.maximumStock -= entry.qty;
 
       await item.save();
-      await productStock.save();
+    //   await productStock.save();
     }
     await inwardChallan.save();
     res.status(201).send(inwardChallan);
   } catch (error) {
     res.status(400).send(error);
   }
+  // try {
+  //   const inwardChallan = new InwardChallanModel(req.body);
+  //   for (let entry of req.body.entries) {
+  //     let productStock = await ProductStockModel.findOne({
+  //       product: entry.itemName,
+  //     });
+  //     if (productStock) {
+  //       productStock.quantity += entry.qty;
+  //       productStock.price += entry.rate;
+  //       productStock.selling_price += entry.netAmount;
+  //     } else {
+  //       productStock = new ProductStockModel({
+  //         company: req.body.companyCode,
+  //         product: entry.itemName,
+  //         quantity: entry.qty,
+  //         price: entry.rate,
+  //         selling_price: entry.netAmount,
+  //       });
+  //     }
+
+  //     // Get the item from the item model and update the stock
+  //     const item = await ItemModel.findById(entry.itemName);
+  //     if (item) {
+  //       item.maximumStock -= entry.qty;
+  //       await item.save();
+  //     }
+  //     await productStock.save();
+  //   }
+  //   await inwardChallan.save();
+  //   res.status(201).send(inwardChallan);
+  // } catch (error) {
+  //   res.status(400).send(error);
+  // }
 };
 
 // For getting all inward challans

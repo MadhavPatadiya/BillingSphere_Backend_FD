@@ -7,28 +7,51 @@ const ItemModel = require("../models/items_model");
 const createDeliveryChallan = async (req, res) => {
   try {
     const deliveryChallan = new DeliveryChallanModel(req.body);
-    // Iterate over the entries and save a new product stock for each entry
     for (let entry of req.body.entries) {
-    //   const productStock = new ProductStockModel({
-    //     company: req.body.companyCode,
-    //     product: entry.itemName,
-    //     quantity: entry.qty,
-    //     price: entry.rate,
-    //     selling_price: entry.netAmount,
-    //   });
+      let productStock = await ProductStockModel.findOne({
+        product: entry.itemName,
+      });
+      if (productStock) {
+        productStock.quantity += entry.qty;
+        productStock.price = entry.rate;
+        productStock.selling_price += entry.netAmount;
+      } else {
+        productStock = new ProductStockModel({
+          company: req.body.companyCode,
+          product: entry.itemName,
+          quantity: entry.qty,
+          price: entry.rate,
+          selling_price: entry.netAmount,
+        });
+      }
 
       // Get the item from the item model and update the stock
       const item = await ItemModel.findById(entry.itemName);
-      item.maximumStock -= entry.qty;
-
-      await item.save();
-    //   await productStock.save();
+      if (item) {
+        item.maximumStock -= entry.qty;
+        await item.save();
+      }
+      await productStock.save();
     }
     await deliveryChallan.save();
     res.status(201).send(deliveryChallan);
   } catch (error) {
     res.status(400).send(error);
   }
+  // try {
+  //   const deliveryChallan = new DeliveryChallanModel(req.body);
+  //   for (let entry of req.body.entries) {
+  //     const item = await ItemModel.findById(entry.itemName);
+  //     item.maximumStock -= entry.qty;
+
+  //     await item.save();
+  //   //   await productStock.save();
+  //   }
+  //   await deliveryChallan.save();
+  //   res.status(201).send(deliveryChallan);
+  // } catch (error) {
+  //   res.status(400).send(error);
+  // }
 };
 
 // For getting all inward challans
