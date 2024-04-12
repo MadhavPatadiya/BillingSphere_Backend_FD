@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 const Barcode = require("./barcode_print_model");
 
 const ItemsSchema = new mongoose.Schema({
-  companyCode: {
-    type: String,
-    ref: "NewCompany",
-    required: true,
-  },
   itemGroup: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "ItemGroup",

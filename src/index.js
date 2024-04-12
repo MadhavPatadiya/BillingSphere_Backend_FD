@@ -147,6 +147,10 @@ app.use("/api/receipt-voucher", ReceiptVoucherRoutes);
 const InwardChallanRoutes = require("./routes/inward_challan_routes");
 app.use("/api/inward-challan", InwardChallanRoutes);
 
+// Routes for delivery challan
+const DeliveryChallanRoutes = require("./routes/delivery_challan_routes");
+app.use("/api/delivery-challan", DeliveryChallanRoutes);
+
 const PORT = 4567;
 app.listen(PORT, () => console.log(`Server started at PORT: ${PORT}`));
 

@@ -23,20 +23,19 @@ const createItem = async (req, res) => {
 const getItems = async (req, res) => {
   try {
     // get user_id from params
-    const { companyCode } = req.params;
     let page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 50;
 
     const skip = (page - 1) * limit;
 
     // Fetch total count of items
-    const totalCount = await Items.countDocuments({ companyCode });
+    const totalCount = await Items.countDocuments({});
 
     // Calculate total number of pages
     const totalPages = Math.ceil(totalCount / limit);
 
     // Fetch items with pagination
-    const allItems = await Items.find({ companyCode }).skip(skip).limit(limit);
+    const allItems = await Items.find({}).skip(skip).limit(limit);
     res.json({ success: true, data: allItems, totalPages });
   } catch (ex) {
     res.json({ success: false, message: ex });
