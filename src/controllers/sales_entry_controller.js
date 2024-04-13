@@ -30,12 +30,12 @@ const createSales = async (req, res) => {
         });
       }
 
-      if (ledger.openingBalance < salesData.totalamount) {
-        return res.json({
-          success: false,
-          message: "Insufficient opening balance.",
-        });
-      }
+      // if (ledger.openingBalance < salesData.totalamount) {
+      //   return res.json({
+      //     success: false,
+      //     message: "Insufficient opening balance.",
+      //   });
+      // }
 
       ledger.openingBalance -= salesData.totalamount;
 

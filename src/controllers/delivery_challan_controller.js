@@ -10,8 +10,9 @@ const createDeliveryChallan = async (req, res) => {
     for (let entry of req.body.entries) {
       let productStock = await ProductStockModel.findOne({
         product: entry.itemName,
-        company: req.body.company,
+        company: req.body.companyCode,
       });
+
       if (productStock) {
         productStock.quantity += entry.qty;
         productStock.price = entry.rate;
