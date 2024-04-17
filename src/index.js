@@ -151,6 +151,10 @@ app.use("/api/inward-challan", InwardChallanRoutes);
 const DeliveryChallanRoutes = require("./routes/delivery_challan_routes");
 app.use("/api/delivery-challan", DeliveryChallanRoutes);
 
+// Routes for sales pos
+const SalesPosRoutes = require("./routes/sales_pos_routes");
+app.use("/api/sales-pos", SalesPosRoutes);
+
 const PORT = 4567;
 app.listen(PORT, () => console.log(`Server started at PORT: ${PORT}`));
 

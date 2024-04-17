@@ -3,59 +3,66 @@ const ProductStockModel = require("../models/product_stock_model");
 const ItemModel = require("../models/items_model");
 
 // For creating a new inward challan
-
 const createDeliveryChallan = async (req, res) => {
   try {
     const deliveryChallan = new DeliveryChallanModel(req.body);
+
     for (let entry of req.body.entries) {
-      let productStock = await ProductStockModel.findOne({
-        product: entry.itemName,
-        company: req.body.companyCode,
+      const item = await ItemModel.findById(entry.itemName);
+
+      // Subtract the stock of the item from the entry qty
+
+      item.maximumStock -= entry.qty;
+      await item.save();
+
+      const existingItem = await ItemModel.findOne({
+        codeNo: item.codeNo,
+        companyCode: req.body.companyCode,
       });
 
-      if (productStock) {
-        productStock.quantity += entry.qty;
-        productStock.price = entry.rate;
-        productStock.selling_price += entry.netAmount;
+      if (existingItem) {
+        existingItem.maximumStock += entry.qty;
+        await existingItem.save();
       } else {
-        productStock = new ProductStockModel({
-          company: req.body.companyCode,
-          product: entry.itemName,
-          quantity: entry.qty,
-          price: entry.rate,
-          selling_price: entry.netAmount,
+        const newItem = new ItemModel({
+          itemGroup: item.itemGroup,
+          itemBrand: item.itemBrand,
+          itemName: item.itemName,
+          printName: item.printName,
+          codeNo: item.codeNo,
+          taxCategory: item.taxCategory,
+          hsnCode: item.hsnCode,
+          barcode: item.barcode,
+          storeLocation: item.storeLocation,
+          measurementUnit: item.measurementUnit,
+          secondaryUnit: item.secondaryUnit,
+          minimumStock: item.minimumStock,
+          maximumStock: entry.qty,
+          monthlySalesQty: item.monthlySalesQty,
+          date: item.date,
+          dealer: item.dealer,
+          subDealer: item.subDealer,
+          retail: item.retail,
+          mrp: item.mrp,
+          price: item.price,
+          openingStock: item.openingStock,
+          status: item.status,
+          images: item.images,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+          companyCode: req.body.companyCode,
         });
-      }
 
-      // Get the item from the item model and update the stock
-      const item = await ItemModel.findById(entry.itemName);
-      if (item) {
-        item.maximumStock -= entry.qty;
-        await item.save();
+        // Save the new item
+        await newItem.save();
       }
-
-      console.log(productStock);
-      await productStock.save();
     }
+    // Save the delivery challan
     await deliveryChallan.save();
     res.status(201).send(deliveryChallan);
   } catch (error) {
     res.status(400).send(error);
   }
-  // try {
-  //   const deliveryChallan = new DeliveryChallanModel(req.body);
-  //   for (let entry of req.body.entries) {
-  //     const item = await ItemModel.findById(entry.itemName);
-  //     item.maximumStock -= entry.qty;
-
-  //     await item.save();
-  //   //   await productStock.save();
-  //   }
-  //   await deliveryChallan.save();
-  //   res.status(201).send(deliveryChallan);
-  // } catch (error) {
-  //   res.status(400).send(error);
-  // }
 };
 
 // For getting all inward challans

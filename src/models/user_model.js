@@ -27,13 +27,27 @@ userSchema.pre("save", function (next) {
     next();
 });
 
-userSchema.pre(["update", "findOneAndUpdate", "updateOne"], function (next) {
+// userSchema.pre(["update", "findOneAndUpdate", "updateOne"], function (next) {
+//     const update = this.getUpdate();
+//     delete update._id;
+//     delete update.id;
+//     this.updatedOn = new Date();
+//     next();
+// });
+
+userSchema.pre("updateOne", function (next) {
     const update = this.getUpdate();
-    delete update._id;
-    delete update.id;
-    this.updatedOn = new Date();
+    if (update.password) {
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(update.password, salt);
+        update.password = hash;
+    }
+    update.updatedOn = new Date();
+    this.id = uuid.v1(); // Generate a new UUID
+
     next();
 });
+
 const UserModel = model("User", userSchema);
 module.exports = UserModel;
 

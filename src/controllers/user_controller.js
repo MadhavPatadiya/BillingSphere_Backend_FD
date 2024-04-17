@@ -70,6 +70,63 @@ const UserController = {
       return res.json({ success: false, message: "error" });
     }
   },
+
+  getAllUser: async (req, res) => {
+    try {
+      const user = await UserModel.find({});
+      return res.json({ success: true, data: user });
+    } catch (ex) {
+      return res.json({ success: false, message: ex });
+    }
+  },
+
+  getUserById: async (req, res) => {
+    try {
+      const user = await UserModel.findOne({ _id: req.params.id });
+
+      if (!user) {
+        return res.json({ success: false, message: "User not found" });
+      }
+      return res.json({ success: true, data: user });
+    } catch (ex) {
+      return res.json({ success: false, message: ex });
+    }
+  },
+
+  updateUser: async (req, res) => {
+    try {
+      const user = await UserModel.updateOne({ _id: req.params.id }, req.body, {
+        new: true,
+        runValidators: true,
+      });
+
+      if (!user) {
+        return res.json({ success: false, message: "User not found" });
+      }
+
+      return res.json({ success: true, data: sales });
+    } catch (ex) {
+      return res.json({ success: false, message: ex });
+    }
+  },
+
+  // delete
+  deleteUser: async (req, res) => {
+    try {
+      const user = await UserModel.findOneAndDelete({ _id: req.params.id });
+
+      if (!user) {
+        return res.json({ success: false, message: "User not found" });
+      }
+
+      return res.json({
+        success: true,
+        message: "User Deleted successfully",
+      });
+    } catch (ex) {
+      return res.json({ success: false, message: ex });
+    }
+  },
 };
 
 module.exports = UserController;
