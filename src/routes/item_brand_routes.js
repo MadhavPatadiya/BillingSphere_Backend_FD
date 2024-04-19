@@ -12,7 +12,6 @@ router.get("/get", verifyToken, ItemsBrandController.getItemGroups);
 // Get a specific item group by ID
 router.get(
   "/get/:itemGroupId",
-  verifyToken,
   ItemsBrandController.getItemGroupById
 );
 
