@@ -23,6 +23,9 @@ router.get("/get-item/:itemId", verifyToken, ItemsController.getItemById);
 // Get a items by Category
 router.get("/get-items-by-group/:category", ItemsController.getItemsByGroup);
 
+// Get brands by category
+router.get("/get-brands-by-category/:category", ItemsController.getBrandsByGroup);
+
 // Update a specific item by ID
 router.put("/update-item/:itemId", verifyToken, ItemsController.updateItem);
 

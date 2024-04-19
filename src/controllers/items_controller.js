@@ -124,6 +124,24 @@ const getItemsByGroup = async (req, res) => {
   }
 };
 
+// Get Brands by Group
+const getBrandsByGroup = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const items = await Items.find({ itemGroup: category });
+    const brands = items.map((item) => item.itemBrand);
+    // Remove duplicates, check if the id are the same
+    const uniqueBrands = brands.filter(
+      (brand, index, self) =>
+        index ===
+        self.findIndex((t) => t.toString() === brand.toString())
+    );
+    res.json({ success: true, data: uniqueBrands });
+  } catch (ex) {
+    res.json({ success: false, message: ex });
+  }
+};
+
 // Helper Function to Update Specific Fields in All Items, Don't use
 // const updateAllItems = async (req, res) => {
 //   try {
@@ -345,4 +363,5 @@ module.exports = {
   getItemByBarCode,
   insertItemsIntoDB,
   updateAllItems,
+  getBrandsByGroup,
 };
