@@ -72,9 +72,14 @@ const PurchaseController = {
         }
 
         // Update maximum stock
-        product.maximumStock += quantity;
-        product.price = sellingPrice;
-        await product.save();
+        // product.maximumStock += quantity;
+        // product.price = sellingPrice;
+        // await product.save();
+
+        await Items.updateOne(
+          { _id: productId },
+          { $inc: { maximumStock: quantity }, price: sellingPrice }
+        );
       }
 
       return res.json({
@@ -92,7 +97,9 @@ const PurchaseController = {
   fetchAllPurchase: async function (req, res) {
     try {
       const { companyCode } = req.params;
-      const fetchAllPurchase = await PurchaseModel.find({ companyCode: companyCode });
+      const fetchAllPurchase = await PurchaseModel.find({
+        companyCode: companyCode,
+      });
       return res.json({ success: true, data: fetchAllPurchase });
     } catch (ex) {
       return res.json({ success: false, message: ex });
@@ -238,9 +245,6 @@ const PurchaseController = {
   },
 
   // Search Purchase Entries by a particular ID
-  
 };
 
 module.exports = PurchaseController;
-
-

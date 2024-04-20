@@ -4,7 +4,7 @@ const verifyToken = require("../middleware/verifyToken");
 
 BarcodePrintRoutes.post(
   "/create-barcode-print",
-  verifyToken,
+  // verifyToken,
   BarcodePrintController.createBarcodePrint
 );
 

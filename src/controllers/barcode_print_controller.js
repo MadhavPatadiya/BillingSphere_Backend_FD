@@ -2,46 +2,46 @@ const BarcodePrint = require("../models/barcode_print_model");
 const Barcode = require("jsbarcode");
 const { createCanvas } = require("canvas");
 
-// const createBarcodePrint = async (req, res) => {
-//   try {
-//     const barcodePrint = await BarcodePrint.create(req.body);
-//     return res.json({
-//       success: true,
-//       message: "Barcode Print Created",
-//       data: barcodePrint,
-//     });
-//   } catch (ex) {
-//     res.json({ success: false, message: ex });
-//   }
-// };
-
 const createBarcodePrint = async (req, res) => {
   try {
-    // Remove duplicate objects based on the barcode value
-    const uniqueItems = [];
-    const seen = new Set();
-    req.body.forEach((item) => {
-      const barcode = item.barcode;
-      if (!seen.has(barcode)) {
-        seen.add(barcode);
-        uniqueItems.push(item);
-      }
-    });
-
-    // Create barcode prints for the unique items
-    const createdBarcodePrints = await Promise.all(
-      uniqueItems.map(async (item) => await BarcodePrint.create(item))
-    );
-
+    const barcodePrint = await BarcodePrint.create(req.body);
     return res.json({
       success: true,
-      message: "Barcode Prints Created",
-      data: createdBarcodePrints,
+      message: "Barcode Print Created",
+      data: barcodePrint,
     });
   } catch (ex) {
-    res.status(400).json({ success: false, message: ex.message });
+    res.json({ success: false, message: ex });
   }
 };
+
+// const createBarcodePrint = async (req, res) => {
+//   try {
+//     // Remove duplicate objects based on the barcode value
+//     const uniqueItems = [];
+//     const seen = new Set();
+//     req.body.forEach((item) => {
+//       const barcode = item.barcode;
+//       if (!seen.has(barcode)) {
+//         seen.add(barcode);
+//         uniqueItems.push(item);
+//       }
+//     });
+
+//     // Create barcode prints for the unique items
+//     const createdBarcodePrints = await Promise.all(
+//       uniqueItems.map(async (item) => await BarcodePrint.create(item))
+//     );
+
+//     return res.json({
+//       success: true,
+//       message: "Barcode Prints Created",
+//       data: createdBarcodePrints,
+//     });
+//   } catch (ex) {
+//     res.status(400).json({ success: false, message: ex.message });
+//   }
+// };
 
 const createBarcodeImage = async (req, res) => {
   try {
