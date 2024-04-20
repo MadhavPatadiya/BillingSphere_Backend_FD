@@ -18,7 +18,7 @@ router.get(
 // Update a specific item group by ID
 router.put(
   "/update/:itemGroupId",
-  verifyToken,
+  // verifyToken,
   ItemsBrandController.updateItemGroup
 );
 
