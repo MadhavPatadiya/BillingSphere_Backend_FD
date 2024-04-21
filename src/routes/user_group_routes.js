@@ -6,7 +6,7 @@ const restrictAccessByUserType = require("../middleware/restriction");
 UserRoutes.post(
   "/create-user-group",
   verifyToken,
-  restrictAccessByUserType(["Admin", "Manager"]),
+  // restrictAccessByUserType(["Admin", "Manager"]),
   UserGroupController.createUserGroup
 );
 
