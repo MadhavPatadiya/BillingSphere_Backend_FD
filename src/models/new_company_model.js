@@ -198,13 +198,13 @@ NewCompanySchema.pre("save", async function (next) {
   this.companyCode = randomNumber.toString();
 
   const user = new User({
-        email: this.emailID,
-        password: this.password,
-        fullName: this.companyName,
-        usergroup: "Admin",
-        companies: [this.companyCode],
-      });
-      await user.save();
+    email: this.emailID,
+    password: this.password,
+    fullName: this.companyName,
+    usergroup: "Admin",
+    companies: [this.companyCode],
+  });
+  await user.save();
   next();
 });
 

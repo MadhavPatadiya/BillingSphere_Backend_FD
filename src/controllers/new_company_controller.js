@@ -3,7 +3,19 @@ const NewCompany = require("../models/new_company_model");
 //For Creating New Company
 const createNewCompany = async (req, res) => {
   try {
-    const company = await NewCompany.create(req.body);
+
+    const newComp = req.body;
+
+    // Handle image data if present
+    if (newComp.logo1 && newComp.logo1.length > 0) {
+      newComp.logo1 = newComp.logo1.map((image) => ({
+        data: Buffer.from(image.data, "base64"),
+        contentType: image.contentType,
+        filename: image.filename,
+      }));
+    }
+
+    const company = await NewCompany.create(newComp);
 
     return res.json({ success: true, message: "Company Created", data: company });
   } catch (ex) {
