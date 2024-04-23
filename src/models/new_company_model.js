@@ -197,13 +197,7 @@ NewCompanySchema.pre("save", async function (next) {
   const randomNumber = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
   this.companyCode = randomNumber.toString();
 
-  if (this.isModified("password") || this.isNew) {
-    try {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(this.password, salt);
-      this.password = hashedPassword;
-
-      const user = new User({
+  const user = new User({
         email: this.emailID,
         password: this.password,
         fullName: this.companyName,
@@ -211,10 +205,6 @@ NewCompanySchema.pre("save", async function (next) {
         companies: [this.companyCode],
       });
       await user.save();
-    } catch (error) {
-      return next(error);
-    }
-  }
   next();
 });
 
