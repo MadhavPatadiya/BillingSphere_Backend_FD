@@ -67,7 +67,7 @@ const deleteLedger = async (req, res) => {
 
 const getAllLedger = async (req, res) => {
   try {
-    const ledgers = await Ledger.find({ status: "Yes" });
+    const ledgers = await Ledger.find({});
     return res.json({ success: true, data: ledgers });
   } catch (ex) {
     return res.json({ success: false, message: ex });
