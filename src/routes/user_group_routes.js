@@ -13,14 +13,14 @@ UserRoutes.post(
 UserRoutes.patch(
   "/update-user-group/:id",
   verifyToken,
-  restrictAccessByUserType(["Admin", "Manager"]),
+  // restrictAccessByUserType(["Admin", "Manager"]),
   UserGroupController.updateUserGroup
 );
 
 UserRoutes.delete(
   "/delete-user-group/:id",
   verifyToken,
-  restrictAccessByUserType(["Admin", "Manager"]),
+  // restrictAccessByUserType(["Admin", "Manager"]),
   UserGroupController.deleteUserGroup
 );
 
