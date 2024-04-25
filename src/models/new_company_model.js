@@ -10,42 +10,14 @@ const NewCompanySchema = new mongoose.Schema({
   companyCode: {
     type: String,
     required: false,
-    default: "",
   },
   companyType: {
-    type: String,
-    required: true,
-  },
-  companyAddress: {
-    type: String,
-    required: true,
-  },
-  gst: {
     type: String,
     required: true,
   },
   country: {
     type: String,
     required: true,
-  },
-  state: {
-    type: String,
-    required: true,
-  },
-  city: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  pincode: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  status: {
-    type: String,
-    required: true,
-    default: "",
   },
   tagline: {
     type: String,
@@ -93,36 +65,6 @@ const NewCompanySchema = new mongoose.Schema({
     required: false,
     default: "",
   },
-  bankName: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  accNo: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  accName: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  branch: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  ifsc: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  upi: {
-    type: String,
-    required: false,
-    default: "",
-  },
   taxation: {
     type: String,
     required: true,
@@ -132,14 +74,6 @@ const NewCompanySchema = new mongoose.Schema({
     required: true,
   },
   acYearTo: {
-    type: String,
-    required: true,
-  },
-  emailID: {
-    type: String,
-    required: true,
-  },
-  password: {
     type: String,
     required: true,
   },
@@ -191,20 +125,106 @@ const NewCompanySchema = new mongoose.Schema({
       },
     },
   ],
+  stores: [
+    {
+      code: {
+        type: String,
+        required: false,
+      },
+      address: {
+        type: String,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+      },
+      state: {
+        type: String,
+        required: true,
+      },
+      pincode: {
+        type: String,
+        required: true,
+      },
+      phone: {
+        type: String,
+        required: true,
+      },
+      bankName: {
+        type: String,
+        required: true,
+      },
+      branch: {
+        type: String,
+        required: true,
+      },
+      accountNo: {
+        type: String,
+        required: true,
+      },
+      accountName: {
+        type: String,
+        required: true,
+      },
+      upi: {
+        type: String,
+        required: true,
+      },
+      status: {
+        type: String,
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+      },
+      password: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+  email: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
 });
 
 NewCompanySchema.pre("save", async function (next) {
   const randomNumber = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
   this.companyCode = randomNumber.toString();
-
-  const user = new User({
-        email: this.emailID,
-        password: this.password,
-        fullName: this.companyName,
+  try {
+    for (const store of this.stores) {
+      const randomNumber =
+        Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
+      store.code = randomNumber.toString();
+      const user = new User({
+        email: store.email,
+        password: store.password,
+        fullName: this.companyName + store.code,
         usergroup: "Admin",
-        companies: [this.companyCode],
+        companies: [store.code],
       });
       await user.save();
+    }
+
+    const user = new User({
+      email: this.email,
+      password: this.password,
+      fullName: this.companyName,
+      usergroup: "Admin",
+      companies: [this.companyCode],
+    });
+
+    await user.save();
+  } catch (error) {
+    return next(error);
+  }
   next();
 });
 
