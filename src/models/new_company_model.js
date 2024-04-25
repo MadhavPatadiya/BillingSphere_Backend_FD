@@ -213,15 +213,18 @@ NewCompanySchema.pre("save", async function (next) {
       await user.save();
     }
 
-  const user = new User({
-        email: this.emailID,
-        password: this.password,
-        fullName: this.companyName,
-        usergroup: "Admin",
-        companies: [this.companyCode],
-      });
-      await user.save();
-  next();
+    const user = new User({
+      email: this.emailID,
+      password: this.password,
+      fullName: this.companyName,
+      usergroup: "Admin",
+      companies: [this.companyCode],
+    });
+    await user.save();
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = mongoose.model("NewCompany", NewCompanySchema);
