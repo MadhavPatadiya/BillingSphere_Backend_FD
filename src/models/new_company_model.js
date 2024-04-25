@@ -213,18 +213,14 @@ NewCompanySchema.pre("save", async function (next) {
       await user.save();
     }
 
-    const user = new User({
-      email: this.email,
-      password: this.password,
-      fullName: this.companyName,
-      usergroup: "Admin",
-      companies: [this.companyCode],
-    });
-
-    await user.save();
-  } catch (error) {
-    return next(error);
-  }
+  const user = new User({
+        email: this.emailID,
+        password: this.password,
+        fullName: this.companyName,
+        usergroup: "Admin",
+        companies: [this.companyCode],
+      });
+      await user.save();
   next();
 });
 
