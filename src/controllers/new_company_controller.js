@@ -6,6 +6,9 @@ const createNewCompany = async (req, res) => {
 
     const newComp = req.body;
 
+
+    console.log(newComp);
+
     // Handle image data if present
     if (newComp.logo1 && newComp.logo1.length > 0) {
       newComp.logo1 = newComp.logo1.map((image) => ({

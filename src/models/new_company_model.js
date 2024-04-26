@@ -177,21 +177,21 @@ const NewCompanySchema = new mongoose.Schema({
       },
       email: {
         type: String,
-        required: true,
+        required: false,
       },
       password: {
         type: String,
-        required: true,
+        required: false,
       },
     },
   ],
   email: {
     type: String,
-    required: true,
+    required: false,
   },
   password: {
     type: String,
-    required: true,
+    required: false,
   },
 });
 
@@ -199,28 +199,34 @@ NewCompanySchema.pre("save", async function (next) {
   const randomNumber = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
   this.companyCode = randomNumber.toString();
   try {
-    for (const store of this.stores) {
-      const randomNumber =
-        Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
-      store.code = randomNumber.toString();
-      const user = new User({
-        email: store.email,
-        password: store.password,
-        fullName: this.companyName + store.code,
-        usergroup: "Admin",
-        companies: [store.code],
-      });
-      await user.save();
-    }
+    await Promise.all(
+      this.stores.map(async (store) => {
+        const storeCodeRandom =
+          Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
+        store.code = storeCodeRandom.toString();
+        const user = new User({
+          email: store.email,
+          password: store.password,
+          fullName: this.companyName + store.code,
+          usergroup: "Admin",
+          companies: [store.code],
+        });
+        await user.save();
 
-    const user = new User({
-      email: this.emailID,
+        console.log(store.email);
+      })
+    );
+
+    const companyUser = new User({
+      email: this.email,
       password: this.password,
       fullName: this.companyName,
       usergroup: "Admin",
       companies: [this.companyCode],
     });
-    await user.save();
+    await companyUser.save();
+
+
     next();
   } catch (error) {
     next(error);
