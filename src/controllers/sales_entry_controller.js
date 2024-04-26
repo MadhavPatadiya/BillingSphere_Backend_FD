@@ -21,60 +21,31 @@ const createSales = async (req, res) => {
     if (saleType === "Debit") {
       const ledger = await Ledger.findById(ledgerID);
 
-      console.log(salesData.totalamount);
-
-      if (!ledger) {
-        return res.json({
-          success: false,
-          message: "Ledger not found.",
-        });
+      if (ledger.openingBalance < salesData.totalamount) {
+        const remainingAmount =
+          salesData.totalamount - ledger.openingBalance;
+        salesData.dueAmount = remainingAmount;
+        ledger.openingBalance = 0;
+        newsalesData.dueAmount = salesData.dueAmount;
+      } else if (ledger.openingBalance >= salesData.totalamount) {
+        ledger.openingBalance -= salesData.totalamount;
       }
-
-      // if (ledger.openingBalance < salesData.totalamount) {
-      //   return res.json({
-      //     success: false,
-      //     message: "Insufficient opening balance.",
-      //   });
-      // }
-
-      ledger.openingBalance -= salesData.totalamount;
-
-      // Save the updated ledger back to the database
       await ledger.save();
     }
-    // if (saleType === "Debit") {
-    //   const ledger = await Ledger.findById(ledgerID);
 
-    //   if (!ledger) {
-    //     return res.json({
-    //       success: false,
-    //       message: "Ledger not found.",
-    //     });
-    //   }
 
-    //   if (ledger.openingBalance < salesData.totalamount) {
-    //     const remainingAmount =
-    //       salesData.totalamount + ledger.openingBalance;
-    //     salesData.dueAmount = remainingAmount;
-    //     ledger.openingBalance = 0;
-    //     newsalesData.dueAmount = salesData.dueAmount;
-    //   } else if (ledger.openingBalance >= salesData.totalamount) {
-    //     ledger.openingBalance -= salesData.totalamount;
-    //   }
-    //   await ledger.save();
-    // }
+    if (saleType === "Cash") {
+      if (salesData.cashAmount < salesData.totalamount) {
+        salesData.dueAmount =
+          salesData.totalamount - salesData.cashAmount;
 
-    // if (saleType === "Cash") {
-    //   if (salesData.cashAmount < salesData.totalamount) {
-    //     salesData.dueAmount =
-    //       salesData.totalamount + salesData.cashAmount;
+        newsalesData.dueAmount = salesData.dueAmount;
+      } else {
+        salesData.dueAmount = 0;
+        newsalesData.dueAmount = salesData.dueAmount;
+      }
+    }
 
-    //     newsalesData.dueAmount = salesData.dueAmount;
-    //   } else {
-    //     salesData.dueAmount = 0;
-    //     newsalesData.dueAmount = salesData.dueAmount;
-    //   }
-    // }
 
     const existingSales = await SalesEntry.findOne({
       $or: [{ dcNo: req.body.dcNo }],
@@ -103,8 +74,12 @@ const createSales = async (req, res) => {
       }
 
       // Update maximum stock
-      sales.maximumStock -= quantity;
-      await sales.save();
+      // sales.maximumStock -= quantity;
+      // await sales.save();
+      await Items.updateOne(
+        { _id: salesId },
+        { $inc: { maximumStock: quantity } }
+      );
     }
 
     // const sales = await SalesEntry.create(req.body);
@@ -136,22 +111,61 @@ const updateSales = async (req, res) => {
     return res.json({ success: false, message: ex });
   }
 };
-
-//For Deleting Sales
 const deleteSales = async (req, res) => {
   try {
-    const sales = await SalesEntry.deleteOne({ _id: req.params.id });
-    if (!sales) {
-      return res.json({ success: false, message: "Sales Entry not found" });
+    const id = req.params.id;
+    const getSales = await SalesEntry.findOne({ _id: id });
+    const ledgerID = getSales.party;
+    const salesType = getSales.type;
+    const salesTotalAmount = parseFloat(getSales.totalamount);
+    const salesDueAmount = parseFloat(getSales.dueAmount);
+
+    for (const entry of getSales.entries) {
+      const salesId = entry.itemName;
+      const quantity = entry.qty;
+      const sales = await Items.findById(salesId);
+      // Update maximum stock
+      sales.maximumStock += quantity;
+      await sales.save();
     }
-    return res.json({
-      success: true,
-      message: "Sales Entry Deleted Successfully!",
-    });
+
+    if (salesType === "Debit") {
+      const ledger = await Ledger.findById(ledgerID);
+
+      if (salesDueAmount == 0) {
+        const op = ledger.openingBalance + salesTotalAmount;
+        ledger.openingBalance = op;
+      } else if (getSales.dueAmount > 0) {
+        const op = salesTotalAmount - salesDueAmount;
+        ledger.openingBalance = op;
+      }
+      await ledger.save();
+    }
+    const getSalesAndDelete = await SalesEntry.findByIdAndDelete(id);
+
+    if (!getSalesAndDelete) {
+      return res.json({ success: false, message: "Sales not found" });
+    }
+    return res.json({ success: true, message: "Deleted Successfully!" });
   } catch (ex) {
     return res.json({ success: false, message: ex });
   }
 };
+//For Deleting Sales
+// const deleteSales = async (req, res) => {
+//   try {
+//     const sales = await SalesEntry.deleteOne({ _id: req.params.id });
+//     if (!sales) {
+//       return res.json({ success: false, message: "Sales Entry not found" });
+//     }
+//     return res.json({
+//       success: true,
+//       message: "Sales Entry Deleted Successfully!",
+//     });
+//   } catch (ex) {
+//     return res.json({ success: false, message: ex });
+//   }
+// };
 
 //  Get all sales
 const getAllSales = async (req, res) => {
