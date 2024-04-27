@@ -2,11 +2,6 @@ const { Schema, model } = require("mongoose");
 
 const taxRateSchema = new Schema({
   rate: { type: String, required: [true, "tax rate is required"] },
-  companyCode: {
-    type: String,
-    ref: "NewCompany",
-    required: true,
-  },
   updatedOn: { type: Date, default: Date.now },
   createdOn: { type: Date, default: Date.now },
 });

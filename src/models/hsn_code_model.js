@@ -2,11 +2,6 @@ const { Schema, model } = require("mongoose");
 
 const hsnCodeSchema = new Schema({
   hsn: { type: String, required: [true, "hsn is required"] },
-  companyCode: {
-    type: String,
-    ref: "NewCompany",
-    required: true,
-  },
   updatedOn: { type: Date },
   createdOn: { type: Date },
 });
