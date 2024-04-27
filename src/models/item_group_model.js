@@ -1,11 +1,6 @@
 const mongoose = require("mongoose");
 
 const ItemsGroupSchema = new mongoose.Schema({
-  companyCode: {
-    type: String,
-    ref: "NewCompany",
-    required: true,
-  },
   name: {
     type: String,
     required: true,

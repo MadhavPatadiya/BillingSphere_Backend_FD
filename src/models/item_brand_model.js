@@ -1,12 +1,7 @@
 const mongoose = require("mongoose");
 
 const ItemsBrandSchema = new mongoose.Schema({
-  companyCode: {
-    type: String,
-    ref: "NewCompany",
-    required: true,
-  },
-  name: {
+    name: {
     type: String,
     required: true,
   },

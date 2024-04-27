@@ -2,11 +2,6 @@ const { Schema, model } = require("mongoose");
 
 const measurementLimitSchema = new Schema({
   measurement: { type: String, required: [true, "measurement is required"] },
-  companyCode: {
-    type: String,
-    ref: "NewCompany",
-    required: true,
-  },
   updatedOn: { type: Date },
   createdOn: { type: Date },
 });

@@ -5,11 +5,6 @@ const secondaryUnitSchema = new Schema({
     type: String,
     required: [true, "secondary unit is required"],
   },
-  companyCode: {
-    type: String,
-    ref: "NewCompany",
-    required: true,
-  },
   updatedOn: { type: Date },
   createdOn: { type: Date },
 });
