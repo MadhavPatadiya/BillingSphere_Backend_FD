@@ -12,7 +12,7 @@ const createDeliveryChallan = async (req, res) => {
 
 
       await item.updateOne(
-        { _id: productId },
+        { _id: item._id },
         { $inc: { maximumStock: -entry.qty } }
       );
 
@@ -23,7 +23,7 @@ const createDeliveryChallan = async (req, res) => {
 
       if (existingItem) {
         await existingItem.updateOne(
-          { _id: productId },
+          { _id: existingItem._id },
           { $inc: { maximumStock: entry.qty } }
         );
       } else {
