@@ -10,10 +10,11 @@ const createDeliveryChallan = async (req, res) => {
     for (let entry of req.body.entries) {
       const item = await ItemModel.findById(entry.itemName);
 
-      // Subtract the stock of the item from the entry qty
 
-      item.maximumStock -= entry.qty;
-      await item.save();
+      await item.updateOne(
+        { _id: productId },
+        { $inc: { maximumStock: -entry.qty } }
+      );
 
       const existingItem = await ItemModel.findOne({
         codeNo: item.codeNo,
@@ -21,8 +22,10 @@ const createDeliveryChallan = async (req, res) => {
       });
 
       if (existingItem) {
-        existingItem.maximumStock += entry.qty;
-        await existingItem.save();
+        await existingItem.updateOne(
+          { _id: productId },
+          { $inc: { maximumStock: entry.qty } }
+        );
       } else {
         const newItem = new ItemModel({
           itemGroup: item.itemGroup,
