@@ -78,7 +78,7 @@ const createSales = async (req, res) => {
       // await sales.save();
       await Items.updateOne(
         { _id: salesId },
-        { $inc: { maximumStock: quantity } }
+        { $inc: { maximumStock: -quantity } }
       );
     }
 
