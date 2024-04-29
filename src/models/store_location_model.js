@@ -1,11 +1,6 @@
 const { Schema, model } = require("mongoose");
 
 const storeLocationSchema = new Schema({
-  companyCode: {
-    type: String,
-    ref: "NewCompany",
-    required: true,
-  },
   location: { type: String, required: [true, "Store location is required"] },
   updatedOn: { type: Date },
   createdOn: { type: Date },
