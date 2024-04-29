@@ -12,7 +12,7 @@ const createDeliveryChallan = async (req, res) => {
 
 
       await item.updateOne(
-        { _id: productId },
+        { _id: item._id },
         { $inc: { maximumStock: -entry.qty } }
       );
 
@@ -23,7 +23,7 @@ const createDeliveryChallan = async (req, res) => {
 
       if (existingItem) {
         await existingItem.updateOne(
-          { _id: productId },
+          { _id: existingItem._id },
           { $inc: { maximumStock: entry.qty } }
         );
       } else {
@@ -72,7 +72,7 @@ const createDeliveryChallan = async (req, res) => {
 const getAllDeliveryChallans = async (req, res) => {
   try {
     const deliveryChallan = await DeliveryChallanModel.find();
-    res.status(200).send(deliveryChallan);
+    res.json({ success: true, data: deliveryChallan });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -90,6 +90,22 @@ const getDeliveryChallan = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+
+const getDeliveryChallanById = async (req, res) => {
+  try {
+    const deliveryChallan = await DeliveryChallanModel.findById(req.params.id);
+
+    if (deliveryChallan) {
+      res.json({ success: true, data: deliveryChallan });
+    } else {
+      res.json({ success: false, message: "deliveryChallan not found" });
+    }
+  } catch (ex) {
+    res.json({ success: false, message: ex });
+  }
+};
+
 
 // For updating a inward challan
 const updateDeliveryChallan = async (req, res) => {
@@ -127,6 +143,9 @@ module.exports = {
   createDeliveryChallan,
   getAllDeliveryChallans,
   getDeliveryChallan,
+  getDeliveryChallanById,
   updateDeliveryChallan,
   deleteDeliveryChallan,
 };
+
+
