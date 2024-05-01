@@ -41,7 +41,7 @@ const ledgerSchema = new mongoose.Schema({
     type: String,
     required: [false, "Please provide a ledger type for this ledger."],
   },
-    priceListCategory: {
+  priceListCategory: {
     type: String,
     required: [false, "Please provide a ledger type for this ledger."],
   },
@@ -114,7 +114,23 @@ const ledgerSchema = new mongoose.Schema({
     type: String,
     required: [false, "Please provide a contact person for this ledger."],
   },
-  bankDetails: {
+  bankName: {
+    type: String,
+    required: [false, "Please provide bank details for this ledger."],
+  },
+  branchName: {
+    type: String,
+    required: [false, "Please provide bank details for this ledger."],
+  },
+  ifsc: {
+    type: String,
+    required: [false, "Please provide bank details for this ledger."],
+  },
+  accName: {
+    type: String,
+    required: [false, "Please provide bank details for this ledger."],
+  },
+  accNo: {
     type: String,
     required: [false, "Please provide bank details for this ledger."],
   },
