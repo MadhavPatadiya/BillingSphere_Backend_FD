@@ -5,9 +5,10 @@ const Items = require("../models/items_model");
 const createSalesPos = async (req, res) => {
   try {
     const salesData = req.body;
+
     salesData.totalAmount = parseFloat(salesData.totalAmount);
     const newsalesData = SalesPos(salesData);
-
+    
     const salesEntry = await SalesPos.create(newsalesData);
 
     return res.json({
@@ -26,7 +27,8 @@ const createSalesPos = async (req, res) => {
 //For Getting All Sales
 const getAllSalesPos = async (req, res) => {
   try {
-    const sales = await SalesPos.find();
+    const salesCode = req.params.code;
+    const sales = await SalesPos.find({ companyCode: salesCode });
 
     return res.json({
       success: true,

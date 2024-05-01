@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 router.post('/create', SalesPosController.createSalesPos);
-router.get('/all', SalesPosController.getAllSalesPos);
+router.get('/all/:code', SalesPosController.getAllSalesPos);
 router.put('/update/:id', SalesPosController.updateSalesPos);
 router.delete('/delete/:id', SalesPosController.deleteSalesPos);
 
