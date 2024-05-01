@@ -131,7 +131,6 @@ const deleteSales = async (req, res) => {
 
     if (salesType === "Debit") {
       const ledger = await Ledger.findById(ledgerID);
-
       if (salesDueAmount == 0) {
         const op = ledger.openingBalance + salesTotalAmount;
         ledger.openingBalance = op;

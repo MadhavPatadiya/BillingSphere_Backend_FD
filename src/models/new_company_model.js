@@ -171,6 +171,10 @@ const NewCompanySchema = new mongoose.Schema({
         type: String,
         required: true,
       },
+      ifsc: {
+        type: String,
+        required: true,
+      },
       status: {
         type: String,
         required: true,
@@ -225,7 +229,6 @@ NewCompanySchema.pre("save", async function (next) {
       companies: [this.companyCode],
     });
     await companyUser.save();
-
 
     next();
   } catch (error) {
