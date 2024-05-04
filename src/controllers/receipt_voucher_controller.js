@@ -5,31 +5,32 @@ const ReceiptVoucherController = {
     createReceiptVoucher: async (req, res) => {
         try {
 
-            const receiptData = req.body;
-            const debit = receiptData.debit;
-            const credit = receiptData.credit;
-            const ledgerID = receiptData.ledger;
-            const receiptType = receiptData.account;
+            // const receiptData = req.body;
+            // const debit = receiptData.debit;
+            // const credit = receiptData.credit;
+            // const ledgerID = receiptData.ledger;
+            // const receiptType = receiptData.account;
 
-            if (receiptType == "Dr") {
-                const ledgerfetch = await Ledger.findById(ledgerID);
-                ledgerfetch.openingBalance -= parseFloat(debit); // Parse debit as float
-                await ledgerfetch.save(); // Save the ledger
-            } else if (receiptType == "Cr") {
-                const ledgerfetch = await Ledger.findById(ledgerID);
-                ledgerfetch.openingBalance += parseFloat(credit); // Parse credit as float
-                await ledgerfetch.save(); // Save the ledger
-            }
+            // if (receiptType == "Dr") {
+            //     const ledgerfetch = await Ledger.findById(ledgerID);
+            //     ledgerfetch.openingBalance -= parseFloat(debit); // Parse debit as float
+            //     await ledgerfetch.save(); // Save the ledger
+            // } else if (receiptType == "Cr") {
+            //     const ledgerfetch = await Ledger.findById(ledgerID);
+            //     ledgerfetch.openingBalance += parseFloat(credit); // Parse credit as float
+            //     await ledgerfetch.save(); // Save the ledger
+            // }
 
 
 
-            const receiptvoucher = new ReceiptVoucher(req.body);
-            const savedReceiptVoucher = await receiptvoucher.save();
-            res.status(201).json(savedReceiptVoucher);
+            const receiptvoucher = req.body;
+            const newItem = await ReceiptVoucher.create(receiptvoucher);
+            res.json({ success: true, data: newItem });
         } catch (error) {
             res.status(400).json({ error: error.message });
         }
     },
+
 
     getReceiptVoucher: async (req, res) => {
         try {
