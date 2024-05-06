@@ -13,8 +13,8 @@ const SalesEntrySchema = new mongoose.Schema({
     type: String,
     ref: "NewCompany",
     required: true,
-},
-type: {
+  },
+  type: {
     type: String,
     trim: true,
     required: [true, "Please provide a type for this sales entry."],
@@ -90,8 +90,8 @@ type: {
       },
     },
   ],
- 
- 
+
+
   sundry: [
     {
       sundryName: {
@@ -129,6 +129,18 @@ type: {
       address: { type: String, required: false },
     },
   ],
+
+  multimode: [
+    {
+      cash: { type: Number, required: false },
+      upi: { type: Number, required: false },
+      card: { type: Number, required: false },
+      cheque: { type: Number, required: false },
+      pending: { type: Number, required: false },
+      finalamount: { type: Number, required: false },
+    }
+  ],
+
   remark: {
     type: String,
     trim: true,
