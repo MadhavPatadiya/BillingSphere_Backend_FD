@@ -17,6 +17,13 @@ const createNewCompany = async (req, res) => {
         filename: image.filename,
       }));
     }
+    if (newComp.logo2 && newComp.logo2.length > 0) {
+      newComp.logo2 = newComp.logo2.map((image) => ({
+        data: Buffer.from(image.data, "base64"),
+        contentType: image.contentType,
+        filename: image.filename,
+      }));
+    }
 
     const company = await NewCompany.create(newComp);
 
@@ -36,6 +43,22 @@ const updateNewCompany = async (req, res) => {
     });
     if (!company) {
       return res.json({ success: false, message: "Company not found" });
+    }
+
+    // Handle image data if present
+    if (company.logo1 && company.logo1.length > 0) {
+      company.logo1 = company.logo1.map((image) => ({
+        data: Buffer.from(image.data, "base64"),
+        contentType: image.contentType,
+        filename: image.filename,
+      }));
+    }
+    if (company.logo2 && company.logo2.length > 0) {
+      company.logo2 = company.logo2.map((image) => ({
+        data: Buffer.from(image.data, "base64"),
+        contentType: image.contentType,
+        filename: image.filename,
+      }));
     }
     return res.json({ success: true, data: company });
   } catch (ex) {
@@ -67,7 +90,7 @@ const getAllCompany = async (req, res) => {
 
 const getSingleCompany = async (req, res) => {
   try {
-    const company = await NewCompany.findOne({ _id: req.params.id });
+    const company = await NewCompany.findById(req.params.id);
     if (!company) {
       return res.json({ success: false, message: "Company not found" });
     }

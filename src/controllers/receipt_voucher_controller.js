@@ -5,54 +5,60 @@ const ReceiptVoucherController = {
     createReceiptVoucher: async (req, res) => {
         try {
 
-            // const receiptData = req.body;
-            // const debit = receiptData.debit;
-            // const credit = receiptData.credit;
-            // const ledgerID = receiptData.ledger;
-            // const receiptType = receiptData.account;
+            const receiptData = req.body;
+            const debit = receiptData.debit;
+            const credit = receiptData.credit;
+            const ledgerID = receiptData.ledger;
+            const receiptType = receiptData.account;
 
-            // if (receiptType == "Dr") {
-            //     const ledgerfetch = await Ledger.findById(ledgerID);
-            //     ledgerfetch.openingBalance -= parseFloat(debit); // Parse debit as float
-            //     await ledgerfetch.save(); // Save the ledger
-            // } else if (receiptType == "Cr") {
-            //     const ledgerfetch = await Ledger.findById(ledgerID);
-            //     ledgerfetch.openingBalance += parseFloat(credit); // Parse credit as float
-            //     await ledgerfetch.save(); // Save the ledger
-            // }
+            if (receiptType == "Dr") {
+                const ledgerfetch = await Ledger.findById(ledgerID);
+                ledgerfetch.debitBalance += parseFloat(debit); // Parse debit as float
+                await ledgerfetch.save(); // Save the ledger
+            } else if (receiptType == "Cr") {
+                const ledgerfetch = await Ledger.findById(ledgerID);
+                ledgerfetch.debitBalance -= parseFloat(credit); // Parse credit as float
+                await ledgerfetch.save(); // Save the ledger
+            }
 
 
 
-            const receiptvoucher = req.body;
-            const newItem = await ReceiptVoucher.create(receiptvoucher);
-            res.json({ success: true, data: newItem });
+            const receiptvoucher = new ReceiptVoucher(req.body);
+            const savedReceiptVoucher = await receiptvoucher.save();
+            res.status(201).json(savedReceiptVoucher);
         } catch (error) {
             res.status(400).json({ error: error.message });
         }
     },
-
 
     getReceiptVoucher: async (req, res) => {
         try {
             const receiptvoucher = await ReceiptVoucher.find();
-            res.status(200).json(receiptvoucher);
+            res.json({ success: true, data: receiptvoucher });
         } catch (error) {
             res.status(400).json({ error: error.message });
         }
     },
+
+
 
 
     getReceiptVoucherById: async (req, res) => {
         try {
-            const receiptvoucher = await receiptvoucher.findById(req.params.id);
-            if (!payment) {
-                return res.status(404).json({ error: "ReceiptVoucher not found" });
+            const { id } = req.params;
+
+            const receiptvoucher = await ReceiptVoucher.findById(id);
+
+            if (!receiptvoucher) {
+                return res.status(404).json({ success: false, error: "Entry not found" });
             }
-            res.status(200).json(receiptvoucher);
+            res.json({ success: true, data: receiptvoucher });
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            res.json({ success: false, message: ex });
         }
     },
+
+
 
     updateReceiptVoucher: async (req, res) => {
         try {

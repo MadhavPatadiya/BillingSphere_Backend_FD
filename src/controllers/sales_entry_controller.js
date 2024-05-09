@@ -17,8 +17,19 @@ const createSales = async (req, res) => {
     const ledgerID = salesData.party;
     const saleType = salesData.type;
     let ledger = null;
+    console.log(salesData);
 
-    if (saleType === "Debit") {
+    if (saleType === "MULTI MODE") {
+      const ledger = await Ledger.findById(ledgerID);
+      ledger.debitBalance += salesData.multimode[0].debit;
+
+      // console.log(ledger.debitBalance);
+      // console.log(typeof ledger.debitBalance);
+      // console.log(salesData.multimode[0].debit);
+      await ledger.save();
+    }
+
+    if (saleType === "DEBIT") {
       const ledger = await Ledger.findById(ledgerID);
 
       if (ledger.openingBalance < salesData.totalamount) {
@@ -34,7 +45,7 @@ const createSales = async (req, res) => {
     }
 
 
-    if (saleType === "Cash") {
+    if (saleType === "CASH") {
       if (salesData.cashAmount < salesData.totalamount) {
         salesData.dueAmount =
           salesData.totalamount - salesData.cashAmount;

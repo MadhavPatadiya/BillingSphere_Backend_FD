@@ -133,11 +133,18 @@ const SalesEntrySchema = new mongoose.Schema({
   multimode: [
     {
       cash: { type: Number, required: false },
-      upi: { type: Number, required: false },
-      card: { type: Number, required: false },
-      cheque: { type: Number, required: false },
+      debit: { type: Number, required: false },
+      adjustedamount: { type: Number, required: false },
       pending: { type: Number, required: false },
       finalamount: { type: Number, required: false },
+    }
+  ],
+  moredetails: [
+    {
+      advpayment: { type: String, required: false },
+      advpaymentdate: { type: String, required: false },
+      installment: { type: String, required: false },
+      toteldebitamount: { type: String, required: false },
     }
   ],
 
