@@ -35,7 +35,7 @@ userSchema.pre("save", function (next) {
 //     next();
 // });
 
-userSchema.pre("updateOne", function (next) {
+userSchema.pre(["update", "findOneAndUpdate", "updateOne"], function (next) {
     const update = this.getUpdate();
     if (update.password) {
         const salt = bcrypt.genSaltSync(10);

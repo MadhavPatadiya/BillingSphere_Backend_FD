@@ -236,4 +236,36 @@ NewCompanySchema.pre("save", async function (next) {
   }
 });
 
+// Now write an update prehook and take the user name and password from the store and update the user in the user model
+
+NewCompanySchema.pre("updateOne", async function (next) {
+  try {
+    const updatedFields = this.getUpdate();
+    const companyCode = updatedFields.companyCode;
+    const stores = updatedFields.stores || [];
+
+    // Update company user
+    const companyUser = await User.findOneAndUpdate(
+      { companies: companyCode },
+      { email: updatedFields.email, password: updatedFields.password },
+      { new: true }
+    );
+
+    // Update users associated with stores
+    await Promise.all(
+      stores.map(async (store) => {
+        await User.findOneAndUpdate(
+          { companies: store.code },
+          { email: store.email, password: store.password },
+          { new: true }
+        );
+      })
+    );
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = mongoose.model("NewCompany", NewCompanySchema);
