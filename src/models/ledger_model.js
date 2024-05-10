@@ -37,6 +37,10 @@ const ledgerSchema = new mongoose.Schema({
     type: Number,
     required: [true, "Please provide a opening balance for this ledger."],
   },
+  debitBalance: {
+    type: Number,
+    required: [true, "Please provide a opening balance for this ledger."],
+  },
   ledgerType: {
     type: String,
     required: [false, "Please provide a ledger type for this ledger."],

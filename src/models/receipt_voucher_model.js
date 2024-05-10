@@ -10,11 +10,11 @@ const ReceiptVoucherSchema = new mongoose.Schema({
         required: true,
     },
     totaldebitamount: {
-        type: String,
+        type: Number,
         required: true,
     },
     totalcreditamount: {
-        type: String,
+        type: Number,
         required: true,
     },
     account: {
@@ -62,31 +62,31 @@ const ReceiptVoucherSchema = new mongoose.Schema({
 
 
 
-    entries: [
-        {
-            account: {
-                type: String,
-                required: true,
-            },
-            ledger: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Ledger",
-                required: true,
-            },
-            remark: {
-                type: String,
-                required: false,
-            },
-            debit: {
-                type: Number,
-                required: true,
-            },
-            credit: {
-                type: Number,
-                required: true,
-            },
-        },
-    ],
+    // entries: [
+    //     {
+    //         account: {
+    //             type: String,
+    //             required: true,
+    //         },
+    //         ledger: {
+    //             type: mongoose.Schema.Types.ObjectId,
+    //             ref: "Ledger",
+    //             required: true,
+    //         },
+    //         remark: {
+    //             type: String,
+    //             required: false,
+    //         },
+    //         debit: {
+    //             type: Number,
+    //             required: true,
+    //         },
+    //         credit: {
+    //             type: Number,
+    //             required: true,
+    //         },
+    //     },
+    // ],
     // cashtype: [
     //     {
     //         cashaccount: {
