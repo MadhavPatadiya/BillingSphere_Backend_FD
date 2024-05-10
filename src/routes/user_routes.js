@@ -6,7 +6,7 @@ const verifyToken = require("../middleware/verifyToken");
 UserRoutes.post("/createAccount", UserController.createAccount);
 UserRoutes.post(
   "/createAccount2/:userId",
-  restrictAccessByUserType(["Admin"]),
+  restrictAccessByUserType(["Admin", "Owner"]),
   UserController.createAccount2
 );
 UserRoutes.post("/signIn", UserController.signIn);
