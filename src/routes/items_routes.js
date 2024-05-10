@@ -19,15 +19,22 @@ router.get("/get-items/:companyCode", ItemsController.getItems);
 // Get a specific item by ID
 router.get("/get-item/:itemId", verifyToken, ItemsController.getItemById);
 
-
 // Get a items by Category
 router.get("/get-items-by-group/:category", ItemsController.getItemsByGroup);
 
 // Get brands by category
-router.get("/get-brands-by-category/:category", ItemsController.getBrandsByGroup);
+router.get(
+  "/get-brands-by-category/:category",
+  ItemsController.getBrandsByGroup
+);
 
 // Update a specific item by ID
-router.put("/update-item/:itemId", verifyToken, ItemsController.updateItem);
+router.put(
+  "/update-item/:itemId",
+  verifyToken,
+  upload.single("image"),
+  ItemsController.updateItem
+);
 
 // Delete a specific item by ID
 router.delete("/delete-item/:itemId", verifyToken, ItemsController.deleteItem);
@@ -39,6 +46,10 @@ router.post("/insert-many-items", ItemsController.insertItemsIntoDB);
 router.put("/update-all-items", ItemsController.updateAllItems);
 
 // Get Items by Barcode
-router.get("/get-item-by-barcode/:barcode", verifyToken, ItemsController.getItemByBarCode);
+router.get(
+  "/get-item-by-barcode/:barcode",
+  verifyToken,
+  ItemsController.getItemByBarCode
+);
 
 module.exports = router;
