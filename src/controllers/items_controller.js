@@ -1,4 +1,3 @@
-
 const Items = require("../models/items_model");
 const BarcodePrint = require("../models/barcode_print_model");
 const createItem = async (req, res) => {
@@ -62,11 +61,51 @@ const getItemById = async (req, res) => {
   }
 };
 
+// const updateItem = async (req, res) => {
+//   try {
+
+//     const newItemData = req.body;
+
+//      // Handle image data if present
+//      if (newItemData.images && newItemData.images.length > 0) {
+//       newItemData.images = newItemData.images.map((image) => ({
+//         data: Buffer.from(image.data, "base64"),
+//         contentType: image.contentType,
+//         filename: image.filename,
+//       }));
+//     }
+
+//     const updatedItem = await Items.findByIdAndUpdate(
+//       { _id: req.params.itemId },
+//       req.body,
+//       { new: true, runValidators: true }
+//     );
+//     if (updatedItem) {
+//       res.json({ success: true, data: updatedItem });
+//     } else {
+//       res.json({ success: false, message: "Item not found" });
+//     }
+//   } catch (ex) {
+//     res.json({ success: false, message: ex });
+//   }
+// };
+
 const updateItem = async (req, res) => {
   try {
+    const newItemData = req.body;
+
+    // Handle image data if present
+    if (newItemData.images && newItemData.images.length > 0) {
+      newItemData.images = newItemData.images.map((image) => ({
+        data: Buffer.from(image.data, "base64"),
+        contentType: image.contentType,
+        filename: image.filename,
+      }));
+    }
+
     const updatedItem = await Items.findByIdAndUpdate(
-      { _id: req.params.itemId },
-      req.body,
+      req.params.itemId, // Removed unnecessary curly braces
+      newItemData, // Changed req.body to newItemData
       { new: true, runValidators: true }
     );
     if (updatedItem) {
@@ -134,8 +173,7 @@ const getBrandsByGroup = async (req, res) => {
     // Remove duplicates, check if the id are the same
     const uniqueBrands = brands.filter(
       (brand, index, self) =>
-        index ===
-        self.findIndex((t) => t.toString() === brand.toString())
+        index === self.findIndex((t) => t.toString() === brand.toString())
     );
     res.json({ success: true, data: uniqueBrands });
   } catch (ex) {
