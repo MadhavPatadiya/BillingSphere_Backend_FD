@@ -258,7 +258,7 @@ NewCompanySchema.pre("save", async function (next) {
 
 // Now write an update prehook and take the user name and password from the store and update the user in the user model
 
-NewCompanySchema.pre("updateOne", async function (next) {
+NewCompanySchema.pre(["update", "findOneAndUpdate", "updateOne"], async function (next) {
   try {
     const updatedFields = this.getUpdate();
     const companyCode = updatedFields.companyCode;
