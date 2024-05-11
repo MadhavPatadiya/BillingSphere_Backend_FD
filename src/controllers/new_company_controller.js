@@ -37,33 +37,42 @@ const createNewCompany = async (req, res) => {
 
 const updateNewCompany = async (req, res) => {
   try {
-    const company = await NewCompany.updateOne({ _id: req.params.id }, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    if (!company) {
-      return res.json({ success: false, message: "Company not found" });
+
+    const newItemData = req.body;
+    // Handle image data if present
+    if (newItemData.logo1 && newItemData.logo1.length > 0) {
+      newItemData.logo1 = newItemData.logo1.map((image) => ({
+        data: Buffer.from(image.data, "base64"),
+        contentType: image.contentType,
+        filename: image.filename,
+      }));
+    }
+    if (newItemData.logo2 && newItemData.logo2.length > 0) {
+      newItemData.logo2 = newItemData.logo2.map((image) => ({
+        data: Buffer.from(image.data, "base64"),
+        contentType: image.contentType,
+        filename: image.filename,
+      }));
     }
 
-    // Handle image data if present
-    if (company.logo1 && company.logo1.length > 0) {
-      company.logo1 = company.logo1.map((image) => ({
-        data: Buffer.from(image.data, "base64"),
-        contentType: image.contentType,
-        filename: image.filename,
-      }));
+    const updatedNewCom = await NewCompany.findByIdAndUpdate(
+      req.params.id, // Removed unnecessary curly braces
+      newItemData, // Changed req.body to newItemData
+      { new: true, runValidators: true }
+    );
+    if (updatedNewCom) {
+      res.json({ success: true, data: updatedNewCom });
+    } else {
+      res.json({ success: false, message: "New Company not found" });
     }
-    if (company.logo2 && company.logo2.length > 0) {
-      company.logo2 = company.logo2.map((image) => ({
-        data: Buffer.from(image.data, "base64"),
-        contentType: image.contentType,
-        filename: image.filename,
-      }));
-    }
-    return res.json({ success: true, data: company });
+
   } catch (ex) {
-    return res.json({ success: false, message: ex });
+    res.json({ success: false, message: ex });
   }
+
+
+
+
 }
 
 //For Deleting Company

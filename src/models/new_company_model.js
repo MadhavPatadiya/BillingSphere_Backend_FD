@@ -77,6 +77,26 @@ const NewCompanySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  tc1: {
+    type: String,
+    required: false,
+  },
+  tc2: {
+    type: String,
+    required: false,
+  },
+  tc3: {
+    type: String,
+    required: false,
+  },
+  tc4: {
+    type: String,
+    required: false,
+  },
+  tc5: {
+    type: String,
+    required: false,
+  },
   logo1: [
     {
       data: {
