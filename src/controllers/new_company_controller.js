@@ -1,4 +1,5 @@
 const NewCompany = require("../models/new_company_model");
+const User = require("../models/user_model");
 
 //For Creating New Company
 const createNewCompany = async (req, res) => {
@@ -34,11 +35,45 @@ const createNewCompany = async (req, res) => {
 };
 
 //For updating Company
-
 const updateNewCompany = async (req, res) => {
   try {
-
     const newItemData = req.body;
+    const storesLength = newItemData.stores.length;
+    const companyId = newItemData.id;
+
+    const prevCompanyData = await NewCompany.findOne({ _id: companyId });
+    const prevCompanyDataStores = prevCompanyData.stores;
+    const prevCompanyDataStoresLength = prevCompanyData.stores.length;
+
+    // Compare the content of stores arrays
+    const newStores = newItemData.stores.filter(store => !prevCompanyDataStores.includes(store));
+    const deletedStores = prevCompanyDataStores.filter(store => !newItemData.stores.includes(store));
+    // Add random code to new stores
+
+
+    const storeCodeRandom =
+      Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
+
+    if (newStores.length > 0) {
+      newStores.forEach(store => {
+        if (!store.code) {
+          store.code = storeCodeRandom.toString();
+        }
+      });
+    }
+
+    // Create new user for new stores
+    if (storesLength > prevCompanyDataStoresLength) {
+      const lastStore = newStores[newStores.length - 1]; // Get the last store
+      await User.create({
+        fullName: lastStore.address,
+        email: lastStore.email,
+        password: lastStore.password, // Remember to hash the password before storing it
+        companies: lastStore.code ?? Math.random().toString(), // Consider using uuid() to generate a unique code
+        usergroup: "Admin"
+      });
+    }
+
     // Handle image data if present
     if (newItemData.logo1 && newItemData.logo1.length > 0) {
       newItemData.logo1 = newItemData.logo1.map((image) => ({
@@ -56,10 +91,11 @@ const updateNewCompany = async (req, res) => {
     }
 
     const updatedNewCom = await NewCompany.findByIdAndUpdate(
-      req.params.id, // Removed unnecessary curly braces
-      newItemData, // Changed req.body to newItemData
+      req.params.id,
+      newItemData,
       { new: true, runValidators: true }
     );
+
     if (updatedNewCom) {
       res.json({ success: true, data: updatedNewCom });
     } else {
@@ -69,11 +105,8 @@ const updateNewCompany = async (req, res) => {
   } catch (ex) {
     res.json({ success: false, message: ex });
   }
-
-
-
-
 }
+
 
 //For Deleting Company
 const deleteNewCompany = async (req, res) => {

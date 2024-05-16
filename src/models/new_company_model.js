@@ -264,28 +264,36 @@ NewCompanySchema.pre(["update", "findOneAndUpdate", "updateOne"], async function
     const companyCode = updatedFields.companyCode;
     const stores = updatedFields.stores || [];
 
+    console.log("Updating company with code:", companyCode);
+
     // Update company user
-    const companyUser = await User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { companies: companyCode },
       { email: updatedFields.email, password: updatedFields.password },
       { new: true }
     );
 
+    console.log("Company updated successfully");
+
     // Update users associated with stores
     await Promise.all(
       stores.map(async (store) => {
+        console.log("Updating store with code:", store.code);
         await User.findOneAndUpdate(
           { companies: store.code },
           { email: store.email, password: store.password },
           { new: true }
         );
+        console.log("Store updated successfully");
       })
     );
 
     next();
   } catch (error) {
+    console.error("Error updating company:", error);
     next(error);
   }
 });
+
 
 module.exports = mongoose.model("NewCompany", NewCompanySchema);
