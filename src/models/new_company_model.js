@@ -231,6 +231,7 @@ NewCompanySchema.pre("save", async function (next) {
         const user = new User({
           email: store.email,
           password: store.password,
+          hintpassword: store.password,
           fullName: this.companyName + store.code,
           usergroup: "Admin",
           companies: [store.code],
@@ -244,6 +245,7 @@ NewCompanySchema.pre("save", async function (next) {
     const companyUser = new User({
       email: this.email,
       password: this.password,
+      hintpassword: this.password,
       fullName: this.companyName,
       usergroup: "Admin",
       companies: [this.companyCode],
@@ -269,7 +271,7 @@ NewCompanySchema.pre(["update", "findOneAndUpdate", "updateOne"], async function
     // Update company user
     await User.findOneAndUpdate(
       { companies: companyCode },
-      { email: updatedFields.email, password: updatedFields.password },
+      { email: updatedFields.email, password: updatedFields.password, hintpassword: updatedFields.password },
       { new: true }
     );
 
@@ -281,7 +283,7 @@ NewCompanySchema.pre(["update", "findOneAndUpdate", "updateOne"], async function
         console.log("Updating store with code:", store.code);
         await User.findOneAndUpdate(
           { companies: store.code },
-          { email: store.email, password: store.password },
+          { email: store.email, password: store.password, hintpassword: store.password },
           { new: true }
         );
         console.log("Store updated successfully");

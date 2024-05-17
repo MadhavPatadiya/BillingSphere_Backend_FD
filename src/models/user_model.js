@@ -12,6 +12,7 @@ const userSchema = new Schema({
     backDateEntry: { type: String, default: "Yes" },
     companies: [{ type: String, ref: 'NewCompany', default: null }],
     password: { type: String, required: true },
+    hintpassword: { type: String, required: false },
     updatedOn: { type: Date },
     creatededOn: { type: Date },
 });

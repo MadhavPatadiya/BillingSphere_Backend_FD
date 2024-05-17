@@ -24,7 +24,10 @@ const ledgerSchema = new mongoose.Schema({
     ref: "LedgerGroup",
     required: [true, "Please provide a ledger group for this ledger."],
   },
-
+  date: {
+    type: String,
+    required: [false, "Please provide a bilwise accounting for this ledger."],
+  },
   bilwiseAccounting: {
     type: String,
     required: [false, "Please provide a bilwise accounting for this ledger."],

@@ -69,6 +69,7 @@ const updateNewCompany = async (req, res) => {
         fullName: lastStore.address,
         email: lastStore.email,
         password: lastStore.password, // Remember to hash the password before storing it
+        hintpassword: lastStore.password,
         companies: lastStore.code ?? Math.random().toString(), // Consider using uuid() to generate a unique code
         usergroup: "Admin"
       });
