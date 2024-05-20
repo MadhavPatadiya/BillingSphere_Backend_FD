@@ -77,7 +77,6 @@ const ProductRoutes = require("./routes/product_routes");
 app.use("/api/product", ProductRoutes);
 
 //Routes for Sundry
-
 const SundryRoutes = require("./routes/sundry_routes");
 app.use("/api/sundry", SundryRoutes);
 
