@@ -7,8 +7,8 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const cors = require("cors");
 const fs = require("fs");
-const key = fs.readFileSync("private.key");
-const cert = fs.readFileSync("certificate.crt");
+// const key = fs.readFileSync("private.key");
+// const cert = fs.readFileSync("certificate.crt");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(helmet());
@@ -20,10 +20,10 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-const cred = {
-  key,
-  cert,
-}
+// const cred = {
+//   key,
+//   cert,
+// }
 
 
 // src\index.js
@@ -35,6 +35,7 @@ mongoose
     // "mongodb+srv://johngospel003:LlJ6bdJ35zCzc53O@cluster0.efot3tr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     // "mongodb+srv://billingspherefuerte:VhjtujqeZDbYvn6o@billingsphere.sg7iac6.mongodb.net/billingSphere?retryWrites=true&w=majority"
     "mongodb+srv://billingspherefuerte:ezMcxwF01Wk2Gv2C@cluster0.e4gsqkd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    // "mongodb://fdsupermartbd:fuerteretail1313@35.154.157.177:27017/?authSource=test"
   )
   .then(() => {
     console.log("Connected to database");
@@ -158,11 +159,14 @@ app.use("/api/sales-pos", SalesPosRoutes);
 const DailyCashRoutes = require("./routes/daily_cash_routes");
 app.use("/api/daily-cash", DailyCashRoutes);
 
+const ExcelRoutes = require("./routes/excel_routes");
+app.use("/api/excel", ExcelRoutes);
+
 const PORT = 4567;
 app.listen(PORT, () => console.log(`Server started at PORT: ${PORT}`));
 
-const httpsServer = https.createServer(cred, app);
-httpsServer.listen(8443, () => {
-  console.log("HTTPS Server running on port 443");
-});
+// const httpsServer = https.createServer(cred, app);
+// httpsServer.listen(8443, () => {
+//   console.log("HTTPS Server running on port 443");
+// });
 

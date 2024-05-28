@@ -7,7 +7,7 @@ const hsnCodeSchema = new Schema({
 });
 
 hsnCodeSchema.pre("save", function (next) {
-  this.updateOn = new Date();
+  this.updatedOn = new Date();
   this.createdOn = new Date();
   next();
 });

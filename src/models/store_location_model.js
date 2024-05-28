@@ -7,7 +7,7 @@ const storeLocationSchema = new Schema({
 });
 
 storeLocationSchema.pre("save", function (next) {
-  this.updateOn = new Date();
+  this.updatedOn = new Date();
   this.createdOn = new Date();
   next();
 });
@@ -17,7 +17,7 @@ storeLocationSchema.pre(
   function (next) {
     const update = this.getUpdate();
     delete update._id;
-    this.updateOn = new Date();
+    this.updatedOn = new Date();
     next();
   }
 );

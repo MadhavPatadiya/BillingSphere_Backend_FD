@@ -24,6 +24,6 @@ var upload = multer({ storage: storage });
 
 ExcelRoutes.post('/importItem', upload.single('file'), ExcelExportController.importExcel);
 
-ExcelRoutes.get("/export-to-excel", ExcelExportController.exportExcel);
+ExcelRoutes.get("/export-to-excel-item", ExcelExportController.exportExcel);
 
 module.exports = ExcelRoutes;
