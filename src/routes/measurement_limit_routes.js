@@ -20,4 +20,19 @@ MeasurementLimitRoutes.get(
   verifyToken,
   MeasurementLimitController.fetchMeasurementLimitById
 );
+
+MeasurementLimitRoutes.put(
+  "/update/:id",
+  verifyToken,
+  MeasurementLimitController.updateMeasurementLimit
+);
+
+// For deleting a measurement limit by id
+MeasurementLimitRoutes.delete(
+  "/delete/:id",
+  verifyToken,
+  MeasurementLimitController.deleteMeasurementLimit
+);
+
+
 module.exports = MeasurementLimitRoutes;

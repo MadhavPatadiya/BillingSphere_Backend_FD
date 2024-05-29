@@ -15,6 +15,19 @@ HsnCodeRoutes.post(
   verifyToken,
   HsnCodeController.createHsnCode
 );
+HsnCodeRoutes.put(
+  "/update/:id",
+  // verifyToken,
+  HsnCodeController.updateHsnCode
+);
+
+
+HsnCodeRoutes.delete(
+  "/delete/:id",
+  verifyToken,
+  HsnCodeController.deleteHsnCode
+);
+
 //For fetching hsn code by id
 HsnCodeRoutes.get("/get/:id", verifyToken, HsnCodeController.fetchHsnCodeById);
 module.exports = HsnCodeRoutes;

@@ -44,6 +44,14 @@ const getItemGroupById = async (req, res) => {
 
 const updateItemGroup = async (req, res) => {
   try {
+
+    if (req.body.images && req.body.images.length > 0) {
+      req.body.images = req.body.images.map((image) => ({
+        data: Buffer.from(image.data, "base64"),
+        contentType: image.contentType,
+        filename: image.filename,
+      }));
+    }
     const updatedItemGroup = await ItemsGroup.findByIdAndUpdate(
       req.params.itemGroupId,
       req.body,

@@ -21,5 +21,17 @@ SecondaryUnitRoutes.get(
   verifyToken,
   SecondaryUnitController.fetchSecondaryUnitById
 );
+SecondaryUnitRoutes.put(
+  "/update/:id",
+  verifyToken,
+  SecondaryUnitController.updateSecondaryUnit
+);
+// For deleting a secondary unit by id
+SecondaryUnitRoutes.delete(
+  "/delete/:id",
+  verifyToken,
+  SecondaryUnitController.deleteSecondaryUnit
+);
+
 
 module.exports = SecondaryUnitRoutes;
