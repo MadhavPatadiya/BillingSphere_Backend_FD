@@ -8,6 +8,12 @@ SalesEntryRoutes.put(
   verifyToken,
   SalesEntryController.updateSales
 );
+SalesEntryRoutes.get(
+  "/fetchAll/:companyCode",
+  verifyToken,
+  SalesEntryController.fetchAllSales
+);
+
 SalesEntryRoutes.delete(
   "/delete/:id",
   verifyToken,

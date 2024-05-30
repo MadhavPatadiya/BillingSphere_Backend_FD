@@ -20,6 +20,17 @@ const createItem = async (req, res) => {
   }
 };
 
+const fetchAllItems = async  (req, res)=> {
+  try {
+      const item = await Items.find();
+      return res.json({ success: true, data: item });
+  }
+  catch (ex) {
+      return res.json({ success: false, message: ex });
+
+  }
+};
+
 const getItems = async (req, res) => {
   try {
     let page = parseInt(req.query.page) || 1;
@@ -403,4 +414,5 @@ module.exports = {
   insertItemsIntoDB,
   updateAllItems,
   getBrandsByGroup,
+  fetchAllItems,
 };

@@ -187,7 +187,17 @@ const getAllSales = async (req, res) => {
     return res.json({ success: false, message: ex });
   }
 };
-
+const fetchAllSales = async (req, res) => {
+  try {
+    const { companyCode } = req.params;
+    const fetchAllSale = await SalesEntry.find({
+      companyCode: companyCode,
+    });
+    return res.json({ success: true, data: fetchAllSale });
+  } catch (ex) {
+    return res.json({ success: false, message: ex });
+  }
+};
 // Download Receipt
 const downloadReceipt = async (req, res) => {
   try {
@@ -305,4 +315,5 @@ module.exports = {
   getAllSales,
   getSingleSales,
   downloadReceipt,
+  fetchAllSales,
 };

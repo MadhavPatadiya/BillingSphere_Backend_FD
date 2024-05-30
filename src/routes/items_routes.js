@@ -15,6 +15,7 @@ router.post(
 
 // Get all items
 router.get("/get-items/:companyCode", ItemsController.getItems);
+router.get("/get-items", ItemsController.fetchAllItems);
 
 // Get a specific item by ID
 router.get("/get-item/:itemId", verifyToken, ItemsController.getItemById);
