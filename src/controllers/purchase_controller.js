@@ -19,30 +19,33 @@ const PurchaseController = {
 
       if (purchaseType === "Debit") {
         const ledger = await Ledger.findById(ledgerID);
-
-        if (ledger.openingBalance < purchaseData.totalamount) {
-          const remainingAmount =
-            purchaseData.totalamount - ledger.openingBalance;
-          purchaseData.dueAmount = remainingAmount;
-          ledger.openingBalance = 0;
-          newPurchaseData.dueAmount = purchaseData.dueAmount;
-        } else if (ledger.openingBalance >= purchaseData.totalamount) {
-          ledger.openingBalance -= purchaseData.totalamount;
-        }
+        ledger.debitBalance += purchaseData.totalamount;
         await ledger.save();
       }
+      // if (ledger.openingBalance < purchaseData.totalamount) {
+      //   const remainingAmount =
+      //     purchaseData.totalamount - ledger.openingBalance;
+      //   purchaseData.dueAmount = remainingAmount;
+      //   ledger.openingBalance = 0;
+      //   newPurchaseData.dueAmount = purchaseData.dueAmount;
+      // } else if (ledger.openingBalance >= purchaseData.totalamount) {
+      //   ledger.openingBalance -= purchaseData.totalamount;
+      // }
+
 
       if (purchaseType === "Cash") {
-        if (purchaseData.cashAmount < purchaseData.totalamount) {
-          purchaseData.dueAmount =
-            purchaseData.totalamount - purchaseData.cashAmount;
-
-          newPurchaseData.dueAmount = purchaseData.dueAmount;
-        } else {
-          purchaseData.dueAmount = 0;
-          newPurchaseData.dueAmount = purchaseData.dueAmount;
-        }
+        newPurchaseData.cashAmount = purchaseData.totalamount;
       }
+      // if (purchaseData.cashAmount < purchaseData.totalamount) {
+      //   purchaseData.dueAmount =
+      //     purchaseData.totalamount - purchaseData.cashAmount;
+
+      //   newPurchaseData.dueAmount = purchaseData.dueAmount;
+      // } else {
+      //   purchaseData.dueAmount = 0;
+      //   newPurchaseData.dueAmount = purchaseData.dueAmount;
+      // }
+
 
       const existingPurchase = await PurchaseModel.findOne({
         $or: [{ billNumber: req.body.billNumber }],

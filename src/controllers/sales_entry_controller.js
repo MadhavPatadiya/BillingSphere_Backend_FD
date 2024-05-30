@@ -31,31 +31,32 @@ const createSales = async (req, res) => {
 
     if (saleType === "DEBIT") {
       const ledger = await Ledger.findById(ledgerID);
-
-      if (ledger.openingBalance < salesData.totalamount) {
-        const remainingAmount =
-          salesData.totalamount - ledger.openingBalance;
-        salesData.dueAmount = remainingAmount;
-        ledger.openingBalance = 0;
-        newsalesData.dueAmount = salesData.dueAmount;
-      } else if (ledger.openingBalance >= salesData.totalamount) {
-        ledger.openingBalance -= salesData.totalamount;
-      }
+      ledger.debitBalance += salesData.totalamount;
       await ledger.save();
     }
+    // if (ledger.openingBalance < salesData.totalamount) {
+    //   const remainingAmount =
+    //     salesData.totalamount - ledger.openingBalance;
+    //   salesData.dueAmount = remainingAmount;
+    //   ledger.openingBalance = 0;
+    //   newsalesData.dueAmount = salesData.dueAmount;
+    // } else if (ledger.openingBalance >= salesData.totalamount) {
+    //   ledger.openingBalance -= salesData.totalamount;
+    // }
 
 
     if (saleType === "CASH") {
-      if (salesData.cashAmount < salesData.totalamount) {
-        salesData.dueAmount =
-          salesData.totalamount - salesData.cashAmount;
-
-        newsalesData.dueAmount = salesData.dueAmount;
-      } else {
-        salesData.dueAmount = 0;
-        newsalesData.dueAmount = salesData.dueAmount;
-      }
+      newsalesData.cashAmount = salesData.totalamount;
     }
+    // if (salesData.cashAmount < salesData.totalamount) {
+    //   salesData.dueAmount =
+    //     salesData.totalamount - salesData.cashAmount;
+
+    //   newsalesData.dueAmount = salesData.dueAmount;
+    // } else {
+    //   salesData.dueAmount = 0;
+    //   newsalesData.dueAmount = salesData.dueAmount;
+    // }
 
 
     const existingSales = await SalesEntry.findOne({
