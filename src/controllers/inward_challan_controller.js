@@ -4,14 +4,14 @@ const ItemModel = require("../models/items_model");
 
 // For creating a new inward challan
 const createInwardChallan = async (req, res) => {
-    try {
+  try {
     const inwardChallan = new InwardChallanModel(req.body);
     for (let entry of req.body.entries) {
       const item = await ItemModel.findById(entry.itemName);
       item.maximumStock -= entry.qty;
 
       await item.save();
-    //   await productStock.save();
+      //   await productStock.save();
     }
     await inwardChallan.save();
     res.status(201).send(inwardChallan);
@@ -57,24 +57,29 @@ const createInwardChallan = async (req, res) => {
 const getAllInwardChallans = async (req, res) => {
   try {
     const inwardChallans = await InwardChallanModel.find();
-    res.status(200).send(inwardChallans);
+    res.json({ success: true, data: inwardChallans });
   } catch (error) {
     res.status(500).send(error);
   }
 };
 
 // For getting a single inward challan
-const getInwardChallan = async (req, res) => {
+const getInwardChallanByid = async (req, res) => {
   try {
     const inwardChallan = await InwardChallanModel.findById(req.params.id);
-    if (!inwardChallan) {
-      return res.status(404).send("Inward Challan not found");
+    if (inwardChallan) {
+      res.json({ success: true, data: inwardChallan });
+    } else {
+      res.json({ success: false, message: "inwardChallan not found" });
+
     }
-    res.status(200).send(inwardChallan);
-  } catch (error) {
-    res.status(500).send(error);
+  } catch (ex) {
+    res.json({ success: false, message: ex });
   }
 };
+
+
+
 
 // For updating a inward challan
 const updateInwardChallan = async (req, res) => {
@@ -111,7 +116,7 @@ const deleteInwardChallan = async (req, res) => {
 module.exports = {
   createInwardChallan,
   getAllInwardChallans,
-  getInwardChallan,
+  getInwardChallanByid,
   updateInwardChallan,
   deleteInwardChallan,
 };
